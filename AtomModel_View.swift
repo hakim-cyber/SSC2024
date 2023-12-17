@@ -74,8 +74,10 @@ struct AtomModel_View: View {
                         .transition(.move(edge: .trailing))
                         .gesture(
                             DragGesture()
-                                .onChanged({ gesture in
-                                    self.offsetForCustomization = gesture.translation.width
+                                .onChanged({ value in
+                                    if value.translation.width > 0{
+                                        self.offsetForCustomization = value.translation.width
+                                    }
                                 })
                                 .onEnded({ value in
                                     if value.translation.width > 10{
