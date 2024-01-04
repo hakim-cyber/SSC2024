@@ -8,27 +8,100 @@
 import SwiftUI
 
 struct AtomModel_View: View {
-     let protonsCount = 10
-    let neutron = 5
-    @State private var electronCount = 30
     
-    @State private var max = 40
-    @State private var min = -40
+    @State private var neutronPositions: [CGSize] = []
+       @State private var protonPositions: [CGSize] = []
+    
+    @State private var generated = false
+    @State private var protonsCount = 1
+    @State private var neutron = 0
+    @State private var electronCount = 1
+    
+    @State private var max = 1
+    @State private var min = -1
     @State private var offsetForCustomization = 0.0
     @State private var showCustomization = false
+    
+    @State private var selectedAtomId:Int = 1
+    
+    let atoms:[Atom] = [Atom(id: "O", proton: 8, neutron: 8, electron: 8, max: 2, min: -2),Atom(id: "H", proton: 1, neutron: 0, electron: 1, max: 1, min: -1),Atom(id: "Al", proton: 13, neutron: 14, electron: 13, max: 3, min: 0),Atom(id: "Si", proton: 14, neutron: 14, electron: 14, max: 4, min: -4)]
+    
+    @State private var rotation = 0.0
+    
+    @State private var scale = 1.0
+    @State private var lastScale = 1.0
     var body: some View {
         GeometryReader{geo in
             ZStack{
                 ZStack{
                     core(geoSize: geo.size)
-                    let orbitsCount = numberOfOrbits(forElectrons: electronCount)
-                    ForEach(1...orbitsCount,id:\.self){id in
-                        orbits(geoSize: geo.size, id: CGFloat(id))
+                    ZStack{
+                        let orbitsCount = numberOfOrbits(forElectrons: electronCount)
+                        ForEach(1...orbitsCount,id:\.self){id in
+                            orbits(geoSize: geo.size, id: CGFloat(id))
+                               
+                        }
                     }
+                    .rotationEffect(.degrees(rotation))
+                    
                 }
+                
+                .contentShape(Circle())
+                .gesture(MagnificationGesture()
+                    .onChanged { value in
+                        let scaleChange = value - 1
+                        let newScale =  Swift.min(Swift.max(scaleChange + lastScale, 0.2), 3)
+                        
+                        
+                       
+                            self.scale = newScale
+                        
+                    }
+                                
+                    .onEnded({ value in
+                        self.lastScale = scale
+                       
+                    })
+                )
+                .scaleEffect(scale)
                 .ignoresSafeArea()
+                .padding(30)
+               
+                .onAppear {
+                        withAnimation(.linear(duration: 10)
+                                        .repeatForever(autoreverses: false)) {
+                                            self.rotation = 360.0
+                                }
+                            }
+               
                 
             }
+            .onAppear {
+                if !generated{
+                    self.generateRandomPositions(geoSize: geo.size)
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2){
+                    withAnimation(.bouncy){
+                        self.selectedAtomId = 3
+                    }
+                }
+            }
+            .onChange(of: selectedAtomId) { newvalue in
+                if newvalue >= 0 && newvalue <= self.atoms.count - 1{
+                    let selected = atoms[newvalue]
+                    
+                    
+                    self.protonsCount = selected.proton
+                    self.electronCount = selected.electron
+                    self.neutron = selected.neutron
+                    self.max = selected.max
+                    self.min = selected.min
+                    
+                    self.generateRandomPositions(geoSize: geo.size)
+                  
+                }
+            }
+            
             .frame(maxWidth: .infinity,maxHeight: .infinity,alignment: .center)
            
            
@@ -41,7 +114,8 @@ struct AtomModel_View: View {
                                                 .bold()
                                                 .font(.system(size: 20))
                                             Spacer()
-                                            Text("O")
+                                            Text("H")
+                                                .bold()
                                         }
                                         VStack{
                                             Text("Electrons")
@@ -122,13 +196,15 @@ struct AtomModel_View: View {
                             }
                             .frame(maxWidth: .infinity,maxHeight: .infinity,alignment: .topTrailing)
                             .padding(25)
-            
-                        
+                           
                            
                        
         }
+        
         .padding(25)
        
+       
+        
         
     }
     func circle(string:String,color:Color,width:CGFloat)->some View{
@@ -143,24 +219,37 @@ struct AtomModel_View: View {
                 .frame(width: width,height: width)
         }
     }
-    func core(geoSize:CGSize)->some View{
-        ZStack{
-            
-            ForEach(0..<neutron,id:\.self){id in
-                circle(string: "", color: .yellow, width: Swift.min(geoSize.width / 6.0 / CGFloat((neutron + protonsCount) ) * 3, geoSize.width / 23) )
-                    .offset(x:.random(in: -geoSize.width / 18 ... geoSize.width / 18),y:.random(in: -geoSize.width / 18 ... geoSize.width / 18))
-                
+    func core(geoSize: CGSize) -> some View {
+            ZStack {
+                if generated{
+                    ForEach(0..<neutron, id: \.self) { id in
+                        circle(string: "",
+                               color: .yellow,
+                               width: Swift.min(geoSize.width / 6.0 / CGFloat((neutron + protonsCount)) * 3, geoSize.width / 23))
+                        .offset(neutronPositions[id])
+                    }
+                    ForEach(0..<protonsCount, id: \.self) { id in
+                        circle(string: "+",
+                               color: .green,
+                               width: Swift.min(geoSize.width / 6.0 / CGFloat((neutron + protonsCount)) * 3, geoSize.width / 23))
+                        .offset(protonPositions[id])
+                    }
+                }
             }
-            ForEach(0..<protonsCount,id:\.self){id in
-                circle(string: "+", color: .green, width:  Swift.min(geoSize.width / 6.0 / CGFloat((neutron + protonsCount) ) * 3, geoSize.width / 23) )
-                    .offset(x:.random(in: -geoSize.width / 18 ... geoSize.width / 18),y:.random(in: -geoSize.width / 18 ... geoSize.width / 18))
-                   
-            }
             
+            .frame(width: geoSize.width / 6)
         }
-        .frame(width: geoSize.width / 6)
-        
-    }
+
+        private func generateRandomPositions(geoSize: CGSize) {
+            neutronPositions = (0..<neutron).map { _ in
+                CGSize(width: .random(in: -geoSize.width / 18 ... geoSize.width / 18), height: .random(in: -geoSize.width / 18 ... geoSize.width / 18))
+            }
+
+            protonPositions = (0..<protonsCount).map { _ in
+                CGSize(width: .random(in: -geoSize.width / 18 ... geoSize.width / 18), height: .random(in: -geoSize.width / 18 ... geoSize.width / 18))
+            }
+            generated = true
+        }
     func orbits(geoSize:CGSize,id:CGFloat) -> some View{
         ZStack{
             Circle()
@@ -168,7 +257,7 @@ struct AtomModel_View: View {
                 
             // Electrons on the Orbit
             RadialLayout{
-                let maxElectron = maxElectronCount(orbitId: Int(id))
+                let maxElectron = Swift.max(maxElectronCount(orbitId: Int(id)),0)
               
                 ForEach(0..<maxElectron, id: \.self) { electronIndex in
                     circle(string: "-", color: .red, width: 25)
@@ -196,8 +285,13 @@ struct AtomModel_View: View {
         return sum
     }
     func numberOfOrbits(forElectrons electrons: Int) -> Int {
-        let numberOfOrbits = Int(ceil(sqrt(Double(electrons) / 2)))
-        return numberOfOrbits
+        if electrons > 0{
+            let numberOfOrbits = Int(ceil(sqrt(Double(electrons) / 2)))
+            return numberOfOrbits
+        }else{
+            return 1
+        }
+        
     }
    
 }
@@ -236,4 +330,13 @@ struct RadialLayout: Layout {
             subview.place(at: point, anchor: .center, proposal: .unspecified)
         }
     }
+}
+
+struct Atom:Identifiable{
+    let id:String
+    let proton:Int
+    let neutron:Int
+    let electron:Int
+    let max:Int
+    let min:Int
 }
