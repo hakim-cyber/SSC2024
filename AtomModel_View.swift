@@ -24,7 +24,9 @@ struct AtomModel_View: View {
     
     @State private var selectedAtomId:Int = 1
     
-    let atoms:[Atom] = [Atom(id: "O", proton: 8, neutron: 8, electron: 8, max: 2, min: -2),Atom(id: "H", proton: 1, neutron: 0, electron: 1, max: 1, min: -1),Atom(id: "Al", proton: 13, neutron: 14, electron: 13, max: 3, min: 0),Atom(id: "Si", proton: 14, neutron: 14, electron: 14, max: 4, min: -4)]
+    @State private var screen = UIScreen.main.bounds.size
+    
+    let atoms:[Atom] = [Atom(id: "O", proton: 8, neutron: 8, electron: 8, max: 2, min: -2),Atom(id: "H", proton: 1, neutron: 0, electron: 1, max: 1, min: -1),Atom(id: "Al", proton: 13, neutron: 14, electron: 13, max: 3, min: 0),Atom(id: "Si", proton: 14, neutron: 14, electron: 14, max: 4, min: -4),Atom(id: "Ca", proton: 20, neutron: 20, electron: 20, max: 2, min: 0)]
     
     @State private var rotation = 0.0
     
@@ -33,13 +35,17 @@ struct AtomModel_View: View {
     var body: some View {
         GeometryReader{geo in
             ZStack{
+                let orbitsCount = numberOfOrbits(forElectrons: electronCount)
                 ZStack{
                     core(geoSize: geo.size)
+                   
                     ZStack{
-                        let orbitsCount = numberOfOrbits(forElectrons: electronCount)
+                      
+                       
+                        
                         ForEach(1...orbitsCount,id:\.self){id in
                             orbits(geoSize: geo.size, id: CGFloat(id))
-                               
+                                .rotationEffect(.degrees(Double(id * 30)))
                         }
                     }
                     .rotationEffect(.degrees(rotation))
@@ -63,27 +69,21 @@ struct AtomModel_View: View {
                        
                     })
                 )
-                .scaleEffect(scale)
-                .ignoresSafeArea()
-                .padding(30)
-               
+                .scaleEffect(scale * Double(1.0 / (Double(orbitsCount) / 3.0)))
+                .animation(.easeInOut, value: orbitsCount)
                 .onAppear {
                         withAnimation(.linear(duration: 10)
                                         .repeatForever(autoreverses: false)) {
                                             self.rotation = 360.0
                                 }
                             }
-               
+              
                 
             }
+            .position(x:screen.width / 2,y:self.screen.height * 0.5)
             .onAppear {
                 if !generated{
                     self.generateRandomPositions(geoSize: geo.size)
-                }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2){
-                    withAnimation(.bouncy){
-                        self.selectedAtomId = 3
-                    }
                 }
             }
             .onChange(of: selectedAtomId) { newvalue in
@@ -97,12 +97,34 @@ struct AtomModel_View: View {
                     self.max = selected.max
                     self.min = selected.min
                     
+                    
+                       
+                  
+                
                     self.generateRandomPositions(geoSize: geo.size)
                   
                 }
             }
             
-            .frame(maxWidth: .infinity,maxHeight: .infinity,alignment: .center)
+            VStack{
+                let selected = atoms[selectedAtomId]
+                Text("\(selected.id)").bold().font(.system(size: 60))
+                    .position(x:self.screen.width * 0.1)
+                    .overlay (alignment:.topTrailing){
+                       let ion = protonsCount - electronCount
+                        
+                        Text(" \(ion > 0 ? "+" : "")\(ion)\n")
+                                .bold().font(.system(size: 30))
+                                .position(x:self.screen.width * 0.14)
+                          
+                        
+                        
+                        
+                    }
+                    
+                    .padding(.top,50)
+                    
+            }
            
            
                             ZStack{
@@ -114,8 +136,19 @@ struct AtomModel_View: View {
                                                 .bold()
                                                 .font(.system(size: 20))
                                             Spacer()
-                                            Text("H")
-                                                .bold()
+                                            Picker( selection: $selectedAtomId) {
+                                                ForEach(atoms.indices,id:\.self) { atom in
+                                                    let selected = atoms[atom]
+                                                    Text(selected.id)
+                                                        .tag(atom)
+                                                        .bold()
+                                                        
+                                                }
+                                            }label:{
+                                                Text("H")
+                                            }
+                                           
+                                            
                                         }
                                         VStack{
                                             Text("Electrons")
