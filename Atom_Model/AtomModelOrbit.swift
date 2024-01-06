@@ -11,13 +11,14 @@ struct AtomModelOrbit: View {
     let geoSize:CGSize
     let id:CGFloat
     let electronCount:Int
+    let show:Bool
     
     @State private var rotation = 0.0
     var body: some View {
         ZStack{
             Circle()
                 .stroke(lineWidth: 1.0)
-                
+                .opacity(show ? 1 : 0)
             // Electrons on the Orbit
             RadialLayout{
                 let maxElectron = Swift.max(maxElectronCount(orbitId: Int(id)),0)
@@ -70,5 +71,5 @@ struct AtomModelOrbit: View {
 }
 
 #Preview {
-    AtomModelOrbit(geoSize: .zero, id: 0, electronCount: 3)
+    AtomModelOrbit(geoSize: .zero, id: 0, electronCount: 3, show: true)
 }

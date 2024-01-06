@@ -22,15 +22,22 @@ struct AtomModel_View: View {
     @State private var offsetForCustomization = 0.0
     @State private var showCustomization = false
     
+    @State private var showProtonsNeutrons = true
+    
     @State private var selectedAtomId:Int = 1
+    
+    @State private var showOrbits = true
     
     @State private var screen = UIScreen.main.bounds.size
     
     let atoms:[Atom] = [Atom(id: "O", proton: 8, neutron: 8, electron: 8, max: 2, min: -2),Atom(id: "H", proton: 1, neutron: 0, electron: 1, max: 1, min: -1),Atom(id: "Al", proton: 13, neutron: 14, electron: 13, max: 3, min: 0),Atom(id: "Si", proton: 14, neutron: 14, electron: 14, max: 4, min: -4),Atom(id: "Ca", proton: 20, neutron: 20, electron: 20, max: 2, min: 0)]
     
     
-    @State private var scale = 1.0
-    @State private var lastScale = 1.0
+    @State private var scale = 0.7
+    @State private var lastScale = 0.7
+    
+    @State private var offset = CGSize.zero
+    @State private var lastOffset = 0
     var body: some View {
         GeometryReader{geo in
             let size = geo.size
@@ -45,7 +52,7 @@ struct AtomModel_View: View {
                         
                         ForEach(1...orbitsCount,id:\.self){id in
                            
-                            AtomModelOrbit(geoSize: size, id:CGFloat(id),electronCount:electronCount)
+                            AtomModelOrbit(geoSize: size, id:CGFloat(id),electronCount:electronCount, show: showOrbits)
                         }
                     }
                    
@@ -53,28 +60,13 @@ struct AtomModel_View: View {
                 }
                 
                 .contentShape(Circle())
-                .gesture(MagnificationGesture()
-                    .onChanged { value in
-                        let scaleChange = value - 1
-                        let newScale =  Swift.min(Swift.max(scaleChange + lastScale, 0.2), 3)
-                        
-                        
-                       
-                            self.scale = newScale
-                        
-                    }
-                                
-                    .onEnded({ value in
-                        self.lastScale = scale
-                       
-                    })
-                )
                 .scaleEffect(scale * Double(1.0 / (Double(orbitsCount) / 3.0)))
+              
                 .animation(.easeInOut, value: orbitsCount)
-               
-                
+                .frame(maxWidth: .infinity,maxHeight:.infinity,alignment:.center)
+                .offset(x:offset.width,y:offset.height)
             }
-            .position(x:screen.width / 2,y:self.screen.height * 0.5)
+           
             .onAppear {
                 if !generated{
                     self.generateRandomPositions(geoSize: size)
@@ -99,6 +91,8 @@ struct AtomModel_View: View {
                   
                 }
             }
+            
+            
             
             VStack{
                 let selected = atoms[selectedAtomId]
@@ -130,7 +124,7 @@ struct AtomModel_View: View {
                                                 .bold()
                                                 .font(.system(size: 20))
                                             Spacer()
-                                            Picker( selection: $selectedAtomId) {
+                                            Picker("", selection: $selectedAtomId) {
                                                 ForEach(atoms.indices,id:\.self) { atom in
                                                     let selected = atoms[atom]
                                                     Text(selected.id)
@@ -138,11 +132,22 @@ struct AtomModel_View: View {
                                                         .bold()
                                                         
                                                 }
-                                            }label:{
-                                                Text("H")
                                             }
+                                            .labelsHidden()
                                            
                                             
+                                        }
+                                        HStack{
+                                            Text("Show Core")
+                                            Spacer()
+                                            Toggle("", isOn: $showProtonsNeutrons)
+                                                .labelsHidden()
+                                        }
+                                        HStack{
+                                            Text("Show Orbits")
+                                            Spacer()
+                                            Toggle("", isOn: $showOrbits)
+                                                .labelsHidden()
                                         }
                                         VStack{
                                             Text("Electrons")
@@ -227,11 +232,26 @@ struct AtomModel_View: View {
                            
                        
         }
+        .contentShape(Rectangle())
+        .gesture(MagnificationGesture()
+            .onChanged { value in
+                let scaleChange = value - 1
+                let newScale =  Swift.min(Swift.max(scaleChange + lastScale, 0.2), 3)
+                
+                
+               
+                    self.scale = newScale
+                
+            }
+                        
+            .onEnded({ value in
+                self.lastScale = scale
+               
+            })
+        )
+        .preferredColorScheme(.dark)
         
         .padding(25)
-       
-       
-        
         
     }
     func circle(string:String,color:Color,width:CGFloat)->some View{
@@ -245,10 +265,11 @@ struct AtomModel_View: View {
                 }
                 .frame(width: width,height: width)
         }
+       
     }
     func core(geoSize: CGSize) -> some View {
             ZStack {
-                if generated{
+                if generated && self.showProtonsNeutrons{
                     ForEach(0..<neutron, id: \.self) { id in
                         circle(string: "",
                                color: .yellow,
@@ -261,6 +282,9 @@ struct AtomModel_View: View {
                                width: Swift.min(geoSize.width / 6.0 / CGFloat((neutron + protonsCount)) * 3, geoSize.width / 23))
                         .offset(protonPositions[id])
                     }
+                }else{
+                    let selected = atoms[selectedAtomId]
+                    circle(string: "\(selected.id)", color: .blue, width: geoSize.width / 6.0 / 3.4).foregroundStyle(.white)
                 }
             }
             
@@ -268,6 +292,7 @@ struct AtomModel_View: View {
         }
 
         private func generateRandomPositions(geoSize: CGSize) {
+            generated = false
             neutronPositions = (0..<neutron).map { _ in
                 CGSize(width: .random(in: -geoSize.width / 18 ... geoSize.width / 18), height: .random(in: -geoSize.width / 18 ... geoSize.width / 18))
             }
