@@ -41,7 +41,7 @@ struct AtomModelOrbit: View {
                         }
                     }
       
-        .frame(width: geoSize.width / 4 * (id) )
+        .frame(width: (min(geoSize.width,geoSize.height) / 4) * id )
        
     }
     func circle(string:String,color:Color,width:CGFloat)->some View{
