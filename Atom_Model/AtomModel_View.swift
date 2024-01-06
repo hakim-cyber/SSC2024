@@ -132,7 +132,7 @@ struct AtomModel_View: View {
                         }
                     }
                 }
-                HStack{
+                VStack{
                     Button{
                         withAnimation(.easeInOut){
                             self.offset = .zero
