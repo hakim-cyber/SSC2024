@@ -28,27 +28,27 @@ struct AtomModel_View: View {
     
     let atoms:[Atom] = [Atom(id: "O", proton: 8, neutron: 8, electron: 8, max: 2, min: -2),Atom(id: "H", proton: 1, neutron: 0, electron: 1, max: 1, min: -1),Atom(id: "Al", proton: 13, neutron: 14, electron: 13, max: 3, min: 0),Atom(id: "Si", proton: 14, neutron: 14, electron: 14, max: 4, min: -4),Atom(id: "Ca", proton: 20, neutron: 20, electron: 20, max: 2, min: 0)]
     
-    @State private var rotation = 0.0
     
     @State private var scale = 1.0
     @State private var lastScale = 1.0
     var body: some View {
         GeometryReader{geo in
+            let size = geo.size
             ZStack{
                 let orbitsCount = numberOfOrbits(forElectrons: electronCount)
                 ZStack{
-                    core(geoSize: geo.size)
+                    core(geoSize: size)
                    
                     ZStack{
                       
                        
                         
                         ForEach(1...orbitsCount,id:\.self){id in
-                            orbits(geoSize: geo.size, id: CGFloat(id))
-                                .rotationEffect(.degrees(Double(id * 30)))
+                           
+                            AtomModelOrbit(geoSize: size, id:CGFloat(id),electronCount:electronCount)
                         }
                     }
-                    .rotationEffect(.degrees(rotation))
+                   
                     
                 }
                 
@@ -71,19 +71,13 @@ struct AtomModel_View: View {
                 )
                 .scaleEffect(scale * Double(1.0 / (Double(orbitsCount) / 3.0)))
                 .animation(.easeInOut, value: orbitsCount)
-                .onAppear {
-                        withAnimation(.linear(duration: 10)
-                                        .repeatForever(autoreverses: false)) {
-                                            self.rotation = 360.0
-                                }
-                            }
-              
+               
                 
             }
             .position(x:screen.width / 2,y:self.screen.height * 0.5)
             .onAppear {
                 if !generated{
-                    self.generateRandomPositions(geoSize: geo.size)
+                    self.generateRandomPositions(geoSize: size)
                 }
             }
             .onChange(of: selectedAtomId) { newvalue in
@@ -101,7 +95,7 @@ struct AtomModel_View: View {
                        
                   
                 
-                    self.generateRandomPositions(geoSize: geo.size)
+                    self.generateRandomPositions(geoSize: size)
                   
                 }
             }
@@ -183,7 +177,7 @@ struct AtomModel_View: View {
                                             .fill(.regularMaterial)
                                         
                                     }
-                                    .frame(width: geo.size.width / 2.2 ,height: 250)
+                                    .frame(width: size.width / 2.2 ,height: 250)
                                     .offset(x:offsetForCustomization)
                                     .transition(.move(edge: .trailing))
                                     .gesture(
@@ -283,47 +277,23 @@ struct AtomModel_View: View {
             }
             generated = true
         }
-    func orbits(geoSize:CGSize,id:CGFloat) -> some View{
-        ZStack{
-            Circle()
-                .stroke(lineWidth: 1.0)
-                
-            // Electrons on the Orbit
-            RadialLayout{
-                let maxElectron = Swift.max(maxElectronCount(orbitId: Int(id)),0)
-              
-                ForEach(0..<maxElectron, id: \.self) { electronIndex in
-                    circle(string: "-", color: .red, width: 25)
-                        
-                }
-                .padding(-10)
-               
-            }
-          
-                     
-        }
-        .frame(width: geoSize.width / 4 * (id) )
-    }
-    
-    func maxElectronCount(orbitId:Int)->Int{
-        let electronsAvailible = Swift.max(electronCount - electronsBefore(orbitId: orbitId), 0)
-        return Swift.min(Swift.max(2 * orbitId * orbitId ,0), electronsAvailible )
-    }
-    func electronsBefore(orbitId:Int)->Int{
-        var sum = 0
-        
-        for i in 1..<orbitId{
-            sum += 2 * i*i
-        }
-        return sum
-    }
     func numberOfOrbits(forElectrons electrons: Int) -> Int {
-        if electrons > 0{
-            let numberOfOrbits = Int(ceil(sqrt(Double(electrons) / 2)))
-            return numberOfOrbits
-        }else{
-            return 1
-        }
+        var orbitCount = 0
+            var remainingElectrons = electronCount
+
+            while remainingElectrons > 0 {
+                let electronsInCurrentOrbit = 2 * orbitCount * orbitCount
+
+                if remainingElectrons >= electronsInCurrentOrbit {
+                    remainingElectrons -= electronsInCurrentOrbit
+                    orbitCount += 1
+                } else {
+                    break
+                }
+            }
+       
+        return Swift.max(orbitCount , 1)
+       
         
     }
    
