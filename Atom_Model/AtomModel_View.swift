@@ -13,20 +13,20 @@ struct AtomModel_View: View {
        @State private var protonPositions: [CGSize] = []
     
     @State private var generated = false
-    @State private var protonsCount = 1
+    @State  var protonsCount = 1
     @State private var neutron = 0
-    @State private var electronCount = 1
+    @State  var electronCount = 1
     
-    @State private var max = 1
-    @State private var min = -1
-    @State private var offsetForCustomization = 0.0
-    @State private var showCustomization = false
+    @State  var max = 1
+    @State  var min = -1
+    @State  var offsetForCustomization = 0.0
+    @State  var showCustomization = false
     
-    @State private var showProtonsNeutrons = true
+    @State  var showProtonsNeutrons = true
     
-    @State private var selectedAtomId:Int = 1
+    @State  var selectedAtomId:Int = 1
     
-    @State private var showOrbits = true
+    @State  var showOrbits = true
     
     @State private var screen = UIScreen.main.bounds.size
     
@@ -58,12 +58,14 @@ struct AtomModel_View: View {
                    
                     
                 }
-                
+                .transition(.rotating(angle: 90))
                 .contentShape(Circle())
-                .scaleEffect(scale * Double(1.0 / (Double(orbitsCount) / 3.0)))
                 .animation(.easeInOut, value: orbitsCount)
+                .animation(.easeInOut, value: selectedAtomId)
+                
                 .frame(maxWidth: .infinity,maxHeight:.infinity,alignment:.center)
                 .offset(x:offset.width,y:offset.height)
+                .scaleEffect(scale * Double(1.0 / (Double(orbitsCount) / 3.0)))
             }
            
             .onAppear {
@@ -93,139 +95,26 @@ struct AtomModel_View: View {
             
             VStack{
                 let selected = atoms[selectedAtomId]
-                Text("\(selected.id)").bold().font(.system(size: 60))
-                    .position(x:self.screen.width * 0.1)
-                    .overlay (alignment:.topTrailing){
-                       let ion = protonsCount - electronCount
-                        
-                        Text(" \(ion > 0 ? "+" : "")\(ion)\n")
-                                .bold().font(.system(size: 30))
-                                .position(x:self.screen.width * 0.14)
-                          
-                        
-                        
-                        
-                    }
+                HStack{
+                    Text("\(selected.id)").bold().font(.system(size: 60))
+                       .font(.system(size: 60))
+                    let ion = protonsCount - electronCount
+                     
+                     Text(" \(ion > 0 ? "+" : "")\(ion)\n")
+                            .font(.system(size: 30))
+                            .baselineOffset(5.0)
+                            .font(.system(size: 30))
                     
-                    .padding(.top,50)
+                }
+                .baselineOffset(5.0) // Adjust the value to fine-tune the position
+                .foregroundColor(.primary)
+                .position(x:self.screen.width * 0.14)
+                .bold()
+                .padding(.top,50)
                     
             }
            
-           
-                            ZStack{
-                                if self.showCustomization{
-                                    
-                                    VStack(spacing: 20){
-                                        HStack{
-                                            Text("Atom")
-                                                .bold()
-                                                .font(.system(size: 20))
-                                            Spacer()
-                                            Picker("", selection: $selectedAtomId) {
-                                                ForEach(atoms.indices,id:\.self) { atom in
-                                                    let selected = atoms[atom]
-                                                    Text(selected.id)
-                                                        .tag(atom)
-                                                        .bold()
-                                                        
-                                                }
-                                            }
-                                            .labelsHidden()
-                                           
-                                            
-                                        }
-                                        HStack{
-                                            Text("Show Core")
-                                            Spacer()
-                                            Toggle("", isOn: $showProtonsNeutrons)
-                                                .labelsHidden()
-                                        }
-                                        HStack{
-                                            Text("Show Orbits")
-                                            Spacer()
-                                            Toggle("", isOn: $showOrbits)
-                                                .labelsHidden()
-                                        }
-                                        VStack{
-                                            Text("Electrons")
-                                                .bold()
-                                            
-                                            HStack(spacing:15){
-                                                Button("+"){
-                                                    if self.protonsCount - self.electronCount > self.min{
-                                                        self.electronCount += 1
-                                                        print("+")
-                                                    }
-                                                }
-                                                .buttonStyle(.borderedProminent)
-                                                .font(.system(size: 24))
-                                                .bold()
-                                                Button("-"){
-                                                    if self.protonsCount - self.electronCount < self.max{
-                                                        self.electronCount -= 1
-                                                        print("-")
-                                                    }
-                                                }
-                                                .buttonStyle(.borderedProminent)
-                                                .font(.system(size: 24))
-                                                .bold()
-                                            }
-                                        }
-                                    }
-                                    .frame(maxWidth: .infinity,maxHeight: .infinity,alignment: .top)
-                                    .padding(30)
-                                    .background{
-                                        RoundedRectangle(cornerRadius: 10.0)
-                                            .fill(.regularMaterial)
-                                        
-                                    }
-                                    .frame(width: size.width / 2.2 ,height: 250)
-                                    .offset(x:offsetForCustomization)
-                                    .transition(.move(edge: .trailing))
-                                    .gesture(
-                                        DragGesture()
-                                            .onChanged({ value in
-                                                if value.translation.width > 0{
-                                                    self.offsetForCustomization = value.translation.width
-                                                }
-                                            })
-                                            .onEnded({ value in
-                                                if value.translation.width > 10{
-                                                    withAnimation(.bouncy){
-                                                        self.showCustomization = false
-                                                    }
-                                                }
-                                            })
-                                        
-                                    )
-                                }else{
-                                    VStack{
-                                        Button{
-                                            withAnimation(.bouncy){
-                                                self.showCustomization = true
-                                                self.offsetForCustomization = 0
-                                            }
-                                           
-                                        }label: {
-                                            ZStack{
-                                                RoundedRectangle(cornerRadius:10)
-                                                    .fill(.regularMaterial)
-                                                
-                                                
-                                                Image(systemName: "chevron.backward.2")
-                                                    .bold()
-                                            }
-                                            .frame(width:50,height: 150)
-                                        }
-                                    }
-                                    .transition(.push(from: .trailing))
-                                    .frame(height: 250)
-                                }
-                                
-                            }
-                            .frame(maxWidth: .infinity,maxHeight: .infinity,alignment: .topTrailing)
-                            .padding(25)
-                           
+            customization(size:size)
                            
                        
         }
@@ -266,7 +155,7 @@ struct AtomModel_View: View {
     }
     let atoms:[Atom] = [Atom(id: "O", proton: 8, neutron: 8, electron: 8, max: 2, min: -2),Atom(id: "H", proton: 1, neutron: 0, electron: 1, max: 1, min: -1),Atom(id: "Al", proton: 13, neutron: 14, electron: 13, max: 3, min: 0),Atom(id: "Si", proton: 14, neutron: 14, electron: 14, max: 4, min: -4),Atom(id: "Ca", proton: 20, neutron: 20, electron: 20, max: 2, min: 0),Atom(id: "Ge", proton: 32, neutron: 41, electron: 32, max: 4, min: 0)
                         ,Atom(id: "Cu", proton: 29, neutron: 35, electron: 29, max: 4, min: 0),Atom(id: "Ag", proton: 47, neutron: 61, electron: 47, max: 3, min: 0),Atom(id: "Rh", proton: 45, neutron: 58, electron: 45, max: 6, min: -1)
-    ]
+                        ]
     
     func circle(string:String,color:Color,width:CGFloat)->some View{
         ZStack{
@@ -288,13 +177,13 @@ struct AtomModel_View: View {
                     ForEach(0..<neutron, id: \.self) { id in
                         circle(string: "",
                                color: .yellow,
-                               width: Swift.min(geoSize.width / 6.0 / CGFloat((neutron + protonsCount)) * 3, geoSize.width / 23))
+                               width: Swift.min(width / CGFloat((neutron + protonsCount)) * 3, geoSize.width / 23))
                         .offset(neutronPositions[id])
                     }
                     ForEach(0..<protonsCount, id: \.self) { id in
                         circle(string: "+",
                                color: .green,
-                               width: Swift.min(geoSize.width / 6.0 / CGFloat((neutron + protonsCount)) * 3, geoSize.width / 23))
+                               width: Swift.min(width / CGFloat((neutron + protonsCount)) * 3, geoSize.width / 23))
                         .offset(protonPositions[id])
                     }
                 }else{
@@ -308,11 +197,11 @@ struct AtomModel_View: View {
         private func generateRandomPositions(geoSize: CGSize) {
             generated = false
             neutronPositions = (0..<neutron).map { _ in
-                CGSize(width: .random(in: -geoSize.width / 18 ... geoSize.width / 18), height: .random(in: -geoSize.width / 18 ... geoSize.width / 18))
+                CGSize(width: .random(in: -geoSize.width / 22 ... geoSize.width / 22), height: .random(in: -geoSize.width / 22 ... geoSize.width / 22))
             }
 
             protonPositions = (0..<protonsCount).map { _ in
-                CGSize(width: .random(in: -geoSize.width / 18 ... geoSize.width / 18), height: .random(in: -geoSize.width / 18 ... geoSize.width / 18))
+                CGSize(width: .random(in: -geoSize.width / 22 ... geoSize.width / 22), height: .random(in: -geoSize.width / 22 ... geoSize.width / 22))
             }
             generated = true
         }
