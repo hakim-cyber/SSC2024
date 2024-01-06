@@ -10,6 +10,7 @@ import SwiftUI
 extension AtomModel_View{
     func customization(size:CGSize) -> some View{
         ZStack{
+          
             if self.showCustomization{
                 
                 VStack(spacing: 20){
@@ -76,7 +77,7 @@ extension AtomModel_View{
                         .fill(.regularMaterial)
                     
                 }
-                .frame(width: size.width / 2.2 ,height: 250)
+                .frame(width:   Swift.min (size.height, size.width) / 1.5 ,height:  Swift.min (size.height, size.width) / 3.1)
                 .offset(x:offsetForCustomization)
                 .transition(.move(edge: .trailing))
                 .gesture(
