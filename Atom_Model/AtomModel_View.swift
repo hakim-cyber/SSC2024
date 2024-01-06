@@ -30,14 +30,14 @@ struct AtomModel_View: View {
     
     @State private var screen = UIScreen.main.bounds.size
     
-    let atoms:[Atom] = [Atom(id: "O", proton: 8, neutron: 8, electron: 8, max: 2, min: -2),Atom(id: "H", proton: 1, neutron: 0, electron: 1, max: 1, min: -1),Atom(id: "Al", proton: 13, neutron: 14, electron: 13, max: 3, min: 0),Atom(id: "Si", proton: 14, neutron: 14, electron: 14, max: 4, min: -4),Atom(id: "Ca", proton: 20, neutron: 20, electron: 20, max: 2, min: 0)]
+  
     
     
-    @State private var scale = 0.7
-    @State private var lastScale = 0.7
+    @State private var scale = 0.5
+    @State private var lastScale = 0.5
     
     @State private var offset = CGSize.zero
-    @State private var lastOffset = 0
+    @State private var lastOffset = CGSize.zero
     var body: some View {
         GeometryReader{geo in
             let size = geo.size
@@ -91,6 +91,7 @@ struct AtomModel_View: View {
                   
                 }
             }
+            
             
             
             
@@ -232,28 +233,59 @@ struct AtomModel_View: View {
                            
                        
         }
+       
         .contentShape(Rectangle())
-        .gesture(MagnificationGesture()
-            .onChanged { value in
-                let scaleChange = value - 1
-                let newScale =  Swift.min(Swift.max(scaleChange + lastScale, 0.2), 3)
-                
-                
-               
-                    self.scale = newScale
-                
-            }
-                        
-            .onEnded({ value in
-                self.lastScale = scale
-               
-            })
-        )
+        .gesture(
+                       DragGesture()
+                           .onChanged { value in
+                               let translation = value.translation
+                               
+                               self.offset = CGSize(width: translation.width, height:translation.height)
+                           }
+                           .onEnded({ value in
+                               self.lastOffset = offset
+                           })
+                           .simultaneously(with:  MagnificationGesture()
+                               .onChanged { value in
+                                   let scaleChange = value - 1
+                                   let newScale =  Swift.min(Swift.max(scaleChange + lastScale, 0.2), 3)
+                                   
+                                   
+                                  
+                                       self.scale = newScale
+                               }
+                                           
+                               .onEnded({ value in
+                                   
+                                   self.lastScale = scale
+                               })
+                           )
+                   )
         .preferredColorScheme(.dark)
         
         .padding(25)
         
+        
+        
     }
+    let atoms: [Atom] = [
+        Atom(id: "O", proton: 8, neutron: 8, electron: 8, max: 2, min: -2),
+        Atom(id: "H", proton: 1, neutron: 0, electron: 1, max: 1, min: -1),
+        Atom(id: "Al", proton: 13, neutron: 14, electron: 13, max: 3, min: 0),
+        Atom(id: "Si", proton: 14, neutron: 14, electron: 14, max: 4, min: -4),
+        Atom(id: "Ca", proton: 20, neutron: 20, electron: 20, max: 2, min: 0),
+        Atom(id: "N", proton: 7, neutron: 7, electron: 7, max: 3, min: -3),
+        Atom(id: "Ne", proton: 10, neutron: 10, electron: 10, max: 0, min: 0),
+        Atom(id: "Mg", proton: 12, neutron: 12, electron: 12, max: 2, min: 0),
+        Atom(id: "K", proton: 19, neutron: 20, electron: 19, max: 1, min: -1),
+        Atom(id: "F", proton: 9, neutron: 10, electron: 9, max: -1, min: -1),
+        Atom(id: "P", proton: 15, neutron: 16, electron: 15, max: 5, min: -3),
+        Atom(id: "Cl", proton: 17, neutron: 18, electron: 17, max: -1, min: -1),
+        Atom(id: "Ar", proton: 18, neutron: 22, electron: 18, max: 0, min: 0),
+        Atom(id: "Mn", proton: 25, neutron: 30, electron: 25, max: 7, min: 2),
+        Atom(id: "Xe", proton: 54, neutron: 77, electron: 54, max: 4, min: -2),
+        Atom(id: "Rb", proton: 37, neutron: 48, electron: 37, max: 1, min: -1)
+    ]
     func circle(string:String,color:Color,width:CGFloat)->some View{
         ZStack{
             Circle()
