@@ -10,9 +10,9 @@ import SwiftUI
 
 
 struct PythagoreanAbout: View {
-    @State private var percentA = 90.0
-    @State private var percentB = 90.0
-    @State private var percentC = 0.0
+    @State private var percentA = 100.0
+    @State private var percentB = 100.0
+    @State private var percentC = -10.0
     
     @State private var rotate = 0.0
     var body: some View {
@@ -20,39 +20,54 @@ struct PythagoreanAbout: View {
             VStack {
                         Triangle()
                     .stroke(lineWidth: 5)
-                    .rotationEffect(.degrees(rotate))
+                   
                             .overlay(
                                 ZStack{
-                                    WaveAnimationRectangle(percent:percentC )
+                                    WaveAnimationRectangle(percent:percentC, name: "c" )
                                         .frame(width:200, height: 200)
-                                     .rotationEffect(.degrees(rotate))
-                                        .rotationEffect(.degrees(30))
+                                     
+                                        .rotationEffect(.degrees(210))
                                         .offset(x: 55, y: -90)
                                     
-                                    WaveAnimationRectangle(percent:percentB )
+                                    WaveAnimationRectangle(percent:percentB, name: "b" )
                                    
                                          .frame(width:100 * CGFloat(sqrt(3)), height: 100 * CGFloat(sqrt(3)))
                                      // .rotationEffect(.degrees(180))
-                                         .rotationEffect(.degrees(0 + rotate))
+                                         .rotationEffect(.degrees(0 ))
                                          .offset(x: 0, y: 145)
                                         
                                     
-                                    WaveAnimationRectangle(percent:percentA )
+                                    WaveAnimationRectangle(percent:percentA ,name: "a")
                                          .frame(width:100 , height: 100)
                                      // .rotationEffect(.degrees(180))
-                                         .rotationEffect(.degrees(90 + rotate))
+                                         .rotationEffect(.degrees(90 ))
                                          .offset(x: 30 - 100 * CGFloat(sqrt(3)) , y: 0)
                                 }
                             )
                             .frame(width:100 * CGFloat(sqrt(3)), height: 100)
                           
                     }
+                   .rotationEffect(.degrees(rotate))
                     .padding()
                     .onAppear(perform: {
-                        withAnimation(.easeInOut(duration: 3.5)) {
-                            self.rotate += 180
+                        withAnimation(.easeInOut(duration: 5.5)) {
+                            self.rotate += 150
+                            
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5){
+                            withAnimation(.bouncy(duration: 5.5)){
+                                self.percentA = -10.0
+                                self.percentC = 99.0 / CGFloat(sqrt(3))
+                            }
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5){
+                            withAnimation(.bouncy(duration: 5.5)){
+                                self.percentB = -10.0
+                                self.percentC = 99.0
+                            }
                         }
                     })
+                    .scaleEffect(1.5)
             /*
              WaveAnimationRectangle(percent:percentA)
              .onAppear {
@@ -104,6 +119,7 @@ struct Triangle:Shape{
 struct WaveAnimationRectangle: View {
     
     let percent :Double
+    let name:String
     @State private var waveOffset = Angle(degrees: 0)
     
     var body: some View {
@@ -115,9 +131,21 @@ struct WaveAnimationRectangle: View {
                 .padding(1.5)
            
             Rectangle().stroke(lineWidth: 5)
-           
+                
         }
-       
+        .overlay(content: {
+            HStack(spacing:1){
+                Text(name)
+                  
+                    .font(.system(size: 25))
+                Text("2")
+                    .font(.system(size: 15))
+                    .baselineOffset(15)
+                
+            }
+            .bold()
+            .foregroundStyle(.white)
+        })
         .onAppear {
             withAnimation(.linear(duration: 1.5).repeatForever(autoreverses: false)) {
                 self.waveOffset = Angle(degrees: 360)
