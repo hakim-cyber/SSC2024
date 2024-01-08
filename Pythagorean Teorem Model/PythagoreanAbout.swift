@@ -19,6 +19,7 @@ struct PythagoreanAbout: View {
         HStack{
             VStack {
                         Triangle()
+                   
                     .stroke(lineWidth: 5)
                    
                             .overlay(
@@ -45,11 +46,18 @@ struct PythagoreanAbout: View {
                                 }
                             )
                             .frame(width:100 * CGFloat(sqrt(3)), height: 100)
+                            .overlay(alignment: .bottom){
+                                Rectangle()
+                                    .stroke(lineWidth: 5)
+                                    .frame(width: 15, height: 15)
+                                    .offset(x: 8 - 100 * CGFloat(sqrt(3)) / 2 )
+                            }
                           
                     }
                    .rotationEffect(.degrees(rotate))
                     .padding()
                     .onAppear(perform: {
+                        
                         withAnimation(.easeInOut(duration: 5.5)) {
                             self.rotate += 150
                             
@@ -66,6 +74,7 @@ struct PythagoreanAbout: View {
                                 self.percentC = 99.0
                             }
                         }
+                         
                     })
                     .scaleEffect(1.5)
             /*
