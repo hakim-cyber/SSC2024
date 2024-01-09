@@ -10,11 +10,11 @@ import SwiftUI
 
 
 struct PythagoreanAbout: View {
-    @State private var percentA = 100.0
-    @State private var percentB = 100.0
+    @State private var percentA = 105.0
+    @State private var percentB = 105.0
     @State private var percentC = -10.0
     
-    @State private var rotate = 0.0
+    @State private var rotate = -40.0
     var body: some View {
         HStack{
             VStack {
@@ -33,14 +33,14 @@ struct PythagoreanAbout: View {
                                     WaveAnimationRectangle(percent:percentB, name: "b" )
                                    
                                          .frame(width:100 * CGFloat(sqrt(3)), height: 100 * CGFloat(sqrt(3)))
-                                     // .rotationEffect(.degrees(180))
+                                      .rotationEffect(.degrees(180))
                                          .rotationEffect(.degrees(0 ))
                                          .offset(x: 0, y: 145)
                                         
                                     
                                     WaveAnimationRectangle(percent:percentA ,name: "a")
                                          .frame(width:100 , height: 100)
-                                     // .rotationEffect(.degrees(180))
+                                      .rotationEffect(.degrees(180))
                                          .rotationEffect(.degrees(90 ))
                                          .offset(x: 30 - 100 * CGFloat(sqrt(3)) , y: 0)
                                 }
@@ -59,7 +59,8 @@ struct PythagoreanAbout: View {
                     .onAppear(perform: {
                         
                         withAnimation(.easeInOut(duration: 5.5)) {
-                            self.rotate += 150
+                            
+                            self.rotate = 150
                             
                         }
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5){
@@ -71,38 +72,12 @@ struct PythagoreanAbout: View {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5){
                             withAnimation(.bouncy(duration: 5.5)){
                                 self.percentB = -10.0
-                                self.percentC = 99.0
+                                self.percentC = 105.0
                             }
                         }
                          
                     })
-                    .scaleEffect(1.5)
-            /*
-             WaveAnimationRectangle(percent:percentA)
-             .onAppear {
-             withAnimation(.bouncy(duration: 3.5)) {
-             self.percentA = -10
-             self.percentC = 30.0
-             
-             }
-             }
-             .frame(width: 150,height: 150)
-             WaveAnimationRectangle(percent:percentB)
-             .onAppear {
-             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5){
-             withAnimation(.bouncy(duration: 3.5)) {
-             self.percentB = -10
-             self.percentC = 90.0
-             }
-             }
-             }
-             .frame(width: 200,height: 200)
-             WaveAnimationRectangle(percent:percentC)
-             .frame(width: 250,height: 250)
-             
-             
-             
-             */
+                    .scaleEffect(1)
         }
     }
 }
@@ -139,7 +114,7 @@ struct WaveAnimationRectangle: View {
                 .ignoresSafeArea(.all)
                 .padding(1.5)
            
-            Rectangle().stroke(lineWidth: 5)
+            Rectangle().stroke(lineWidth: 8)
                 
         }
         .overlay(content: {
