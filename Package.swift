@@ -10,7 +10,7 @@ import AppleProductTypes
 let package = Package(
     name: "SSC24",
     platforms: [
-        .iOS("16.0")
+        .iOS("17.0")
     ],
     products: [
         .iOSApplication(
@@ -20,7 +20,7 @@ let package = Package(
             teamIdentifier: "4NLRT8KSZR",
             displayVersion: "1.0",
             bundleVersion: "1",
-            appIcon: .placeholder(icon: .dog),
+            appIcon: .placeholder(icon: .sparkle),
             accentColor: .presetColor(.orange),
             supportedDeviceFamilies: [
                 .pad,
