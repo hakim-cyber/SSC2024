@@ -10,6 +10,7 @@ import SwiftUI
 
 
 struct PythagoreanAbout: View {
+
     @State private var percentA = 105.0
     @State private var percentB = 105.0
     @State private var percentC =  -10.0
@@ -20,102 +21,118 @@ struct PythagoreanAbout: View {
     
     @State private var showWaterFall = false
     var body: some View {
-        
+        GeometryReader{ geo in
+            let size = geo.size
+            let modelSize = size.height  * 0.8
+            
             VStack {
-                        Triangle()
-                   
+                Triangle()
+                
                     .stroke(lineWidth: 5)
-                   
-                            .overlay(
-                                ZStack{
-                                    WaveAnimationRectangle(showWaterFall:showWaterFall, percent:percentC, name: "c" )
-                                        .frame(width:200, height: 200)
-                                     
-                                        .rotationEffect(.degrees(210))
-                                        .offset(x: 55, y: -90)
-                                    
-                                    WaveAnimationRectangle(showWaterFall: false, percent:percentB, name: "b" )
-                                   
-                                         .frame(width:100 * CGFloat(sqrt(3)), height: 100 * CGFloat(sqrt(3)))
-                                      .rotationEffect(.degrees(180))
-                                         .rotationEffect(.degrees(0 ))
-                                         .offset(x: 0, y: 145)
-                                        
-                                    
-                                    WaveAnimationRectangle(showWaterFall: false, percent:percentA ,name: "a")
-                                         .frame(width:100 , height: 100)
-                                      .rotationEffect(.degrees(180))
-                                         .rotationEffect(.degrees(90 ))
-                                         .offset(x: 30 - 100 * CGFloat(sqrt(3)) , y: 0)
-                                }
-                            )
-                            .frame(width:100 * CGFloat(sqrt(3)), height: 100)
-                            .overlay(alignment: .bottom){
-                                Rectangle()
-                                    .stroke(lineWidth: 5)
-                                    .frame(width: 15, height: 15)
-                                    .offset(x: 8 - 100 * CGFloat(sqrt(3)) / 2 )
-                            }
-                          
-                    }
-                   .rotationEffect(.degrees(rotate))
-                    .padding()
-                    .onAppear(perform: {
-                        
-                        self.animate = true
-                         
-                    })
-                    .scaleEffect(1)
-                    .onChange(of: animate) {_, newValue in
-                        if newValue{
+                
+                    .overlay(
+                        ZStack{
+                            WaveAnimationRectangle(showWaterFall:showWaterFall, percent:percentC, name: "c" )
+                                .frame(width:modelSize, height: modelSize)
                             
-                            withAnimation(.easeInOut(duration: 5.5)) {
-                                
-                                self.rotate = 150
-                                
-                            }completion: {
-                                self.showWaterFall = false
-                                self.animate = false
-                            }
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5){
-                                withAnimation(.bouncy(duration: 5.5)){
-                                    self.showWaterFall = true
-                                    self.percentA = -10.0
-                                    self.percentC = 99.0 / CGFloat(sqrt(3))
-                                }
-                            }
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5){
-                                withAnimation(.bouncy(duration: 5.5)){
-                                    self.percentB = -10.0
-                                    self.percentC = 105.0
-                                }
-                            }
-                        }else{
-                            withAnimation(.easeInOut(duration: 0.5)) {
-                                self.rotate = -40
-                                self.percentA = 105
-                                self.percentC = -10
-                                self.percentB = 105
-                            }
+                                .rotationEffect(.degrees(210))
+                                .offset(x: modelSize / 3.7, y: -modelSize / 2 + 8 )
+                            
+                            WaveAnimationRectangle(showWaterFall: false, percent:percentB, name: "b" )
+                            
+                                .frame(width:modelSize / 2 * CGFloat(sqrt(3)), height: modelSize / 2 * CGFloat(sqrt(3)))
+                                .rotationEffect(.degrees(180))
+                                .rotationEffect(.degrees(0 ))
+                                .offset(x: 0, y: modelSize / 2  + 50)
+                            
+                            
+                            WaveAnimationRectangle(showWaterFall: false, percent:percentA ,name: "a")
+                                .frame(width:modelSize / 2 , height: modelSize / 2 )
+                                .rotationEffect(.degrees(180))
+                                .rotationEffect(.degrees(90 ))
+                                .offset(x: 30 - modelSize / 2 * CGFloat(sqrt(3)) , y: 0)
+                        }
+                    )
+                    .frame(width:modelSize / 2 * CGFloat(sqrt(3)), height: modelSize / 2)
+                    .overlay(alignment: .bottom){
+                        Rectangle()
+                            .stroke(lineWidth: 5)
+                            .frame(width: 15, height: 15)
+                            .offset(x: 8 - modelSize / 2 * CGFloat(sqrt(3)) / 2 )
+                    }
+                
+            }
+            .rotationEffect(.degrees(rotate))
+            .padding()
+            .onAppear(perform: {
+                
+                self.animate = true
+                
+            })
+            
+            .onChange(of: animate) {_, newValue in
+                if newValue{
+                    
+                    withAnimation(.easeInOut(duration: 5.5)) {
+                        
+                        self.rotate = 150
+                        
+                    }completion: {
+                        self.showWaterFall = false
+                        self.animate = false
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5){
+                        withAnimation(.bouncy(duration: 5.5)){
+                            self.showWaterFall = true
+                            self.percentA = -10.0
+                            self.percentC = 99.0 / CGFloat(sqrt(3))
                         }
                     }
-                    
-                    .frame(width:UIScreen.main.bounds.width / 2,height: UIScreen.main.bounds.height / 2)
-                    .overlay(alignment: .topTrailing){
-                        if !animate {
-                          
-                                Button{
-                                    self.animate = true
-                                }label: {
-                                    Image(systemName: "play.circle")
-                                        .bold()
-                                        .font(.system(size: 60))
-                                }
-                            }
-                            
-                        
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5){
+                        withAnimation(.bouncy(duration: 5.5)){
+                            self.percentB = -10.0
+                            self.percentC = 105.0
+                        }
                     }
-                    
+                }else{
+                    withAnimation(.easeInOut(duration: 0.5)) {
+                        self.rotate = -40
+                        self.percentA = 105
+                        self.percentC = -10
+                        self.percentB = 105
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity,maxHeight: .infinity,alignment: .center)
+            
+            .scaleEffect(0.5)
+            
+        }
+        .blur(radius: animate ? 0:10)
+        .onDisappear{
+            self.animate = false
+        }
+        .overlay(alignment: .center){
+            if !animate {
+                HStack{
+                   
+                    Button{
+                        self.animate = true
+                    }label: {
+                        Image(systemName: "play.circle")
+                            .bold()
+                            .font(.system(size:40))
+                           
+                           
+                    }
+                   
+                }
+            }
+            
+            
+        }
+        
+        
                     
     }
 }
@@ -164,13 +181,13 @@ struct WaveAnimationRectangle: View {
             ZStack{
                 if  showWaterFall{
                     CurvedLine(reverse: false)
-                        .stroke(.blue,style: .init(lineWidth: showWaterFall ? 6 :0))
+                        .stroke(.blue,style: .init(lineWidth: showWaterFall ? 5 :2))
                         .frame(width:geo.size.width  , height:geo.size.height)
-                        .transition(.asymmetric(insertion: .scale(scale:0.75).animation(.easeInOut(duration: 0.7)), removal: .identity))
+                        .transition(.asymmetric(insertion: .scale(scale:0.7).animation(.easeInOut(duration: 0.4)), removal: .identity))
                     CurvedLine(reverse: true)
-                        .stroke(.blue,style: .init(lineWidth: showWaterFall ? 6 :0))
+                        .stroke(.blue,style: .init(lineWidth: showWaterFall ? 10 :4))
                         .frame(width:geo.size.width  , height:geo.size.height)
-                        .transition(.asymmetric(insertion: .scale(scale:0.75).animation(.easeInOut(duration: 0.7)), removal: .identity))
+                        .transition(.asymmetric(insertion: .scale(scale:0.7).animation(.easeInOut(duration: 0.55)), removal: .identity))
                        
                 }
                 
