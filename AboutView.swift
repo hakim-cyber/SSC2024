@@ -17,7 +17,7 @@ struct AboutView: View {
                 LazyVStack(spacing:20){
                     info.content
                         .scaledToFit()
-                        .frame(width: geo.size.width,height: geo.size.height / 3.5)
+                        .frame(width: geo.size.width,height:250)
                       
                         .background{
                             Color.init(uiColor: .systemBackground)
@@ -37,13 +37,13 @@ struct AboutView: View {
                             HStack{
                                 Text("Open")
                                     .font(.system(size:19))
-                                Image( systemName: "play.fill")
+                                Image( systemName: "link")
                                     .font(.system(size:14))
                             }
                                 
                            
                             .fontWeight(.black)
-                            .padding(8)
+                            .padding(5)
                                
                         }
                         .buttonStyle(.borderedProminent)

@@ -44,17 +44,7 @@ enum AboutInfo {
  case pyfagore, atomModel
     
     var content: some View{
-        switch self {
-        case .pyfagore:
-      
-              return  ImageView(image: nil)
-            
-                
-        case .atomModel:
-           
-               return ImageView(image: Image("electron"))
-            
-        }
+        ImageView(info: self)
     }
     var header:String{
         switch self {
@@ -137,13 +127,16 @@ In essence, delving into the intricacies of atoms provides a foundation for tech
 }
 
 struct ImageView:View {
-    let image:Image?
+    
+    let info:AboutInfo
    
     var body: some View {
-        if let image = image{
-            image.resizable()
-        }else{
+        switch info {
+        case .pyfagore:
             PythagoreanAbout()
+        case .atomModel:
+            Image("electron").resizable()
         }
     }
+        
 }

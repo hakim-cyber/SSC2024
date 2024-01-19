@@ -43,7 +43,7 @@ struct PythagoreanAbout: View {
                                 .frame(width:modelSize / 2 * CGFloat(sqrt(3)), height: modelSize / 2 * CGFloat(sqrt(3)))
                                 .rotationEffect(.degrees(180))
                                 .rotationEffect(.degrees(0 ))
-                                .offset(x: 0, y: modelSize / 2  + 50)
+                                .offset(x: 0, y: modelSize / 2  + 45)
                             
                             
                             WaveAnimationRectangle(showWaterFall: false, percent:percentA ,name: "a")
