@@ -25,7 +25,7 @@ struct PythagoreanAbout: View {
     var body: some View {
         GeometryReader{ geo in
             let size = geo.size
-            let modelSize =  200.0
+            let modelSize = min(size.width,size.height) * 0.8
             VStack(alignment: .center){
                 
                 HStack(alignment:.bottom,spacing: 0){
@@ -49,11 +49,12 @@ struct PythagoreanAbout: View {
                     
                     
                 }
+                .rotationEffect(.degrees(rotate),anchor: .bottom)
+                
                
-                .position(x:screen.width / 2 + modelSize / 4 ,y:screen.height / 2 - modelSize / 4 )
             }
-            .rotationEffect(.degrees(rotate))
-          
+           
+            .position(x:size.width / 2)
             .onAppear(perform: {
                 
                 self.animate = true
@@ -96,7 +97,8 @@ struct PythagoreanAbout: View {
           
             
         }
-        .frame(maxWidth: .infinity,maxHeight: .infinity,alignment: .center)
+        .scaleEffect(0.35)
+        
         .blur(radius: animate ? 0:10)
         .onDisappear{
             self.animate = false

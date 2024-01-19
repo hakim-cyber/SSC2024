@@ -6,8 +6,9 @@ struct MyApp: App {
     var body: some Scene {
         WindowGroup {
            
-            PythagoreanAbout()
+            PythagoreanSimulator()
             .preferredColorScheme(.dark)
+          
         }
     }
 }
