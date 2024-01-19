@@ -20,50 +20,40 @@ struct PythagoreanAbout: View {
     @State private var animate = false
     
     @State private var showWaterFall = false
+    
+    @State private var screen = UIScreen.main.bounds
     var body: some View {
         GeometryReader{ geo in
             let size = geo.size
-            let modelSize = size.height  * 0.8
-            
-            VStack {
-                Triangle()
+            let modelSize =  200.0
+            VStack(alignment: .center){
                 
-                    .stroke(lineWidth: 5)
-                
-                    .overlay(
-                        ZStack{
-                            WaveAnimationRectangle(showWaterFall:showWaterFall, percent:percentC, name: "c" )
-                                .frame(width:modelSize, height: modelSize)
+                HStack(alignment:.bottom,spacing: 0){
+                    WaveAnimationRectangle(showWaterFall: false, percent: percentA, name: "a")
+                        .frame(width:modelSize / 2   ,height: modelSize / 2   )
+                        .rotationEffect(.degrees(-90))
+                    Triangle()
+                        .stroke(lineWidth: 1.5)
+                        .frame(width:modelSize / 2  * CGFloat(sqrt(3)), height: modelSize / 2)
+                        .overlay(alignment:.bottom){
+                            WaveAnimationRectangle(showWaterFall: false, percent: percentB, name: "b")
+                                .frame(width: modelSize / 2  * CGFloat(sqrt(3))   ,height: modelSize / 2  * CGFloat(sqrt(3))  )
+                                .rotationEffect(.degrees(180),anchor: .bottom)
                             
-                                .rotationEffect(.degrees(210))
-                                .offset(x: modelSize / 3.7, y: -modelSize / 2 + 8 )
-                            
-                            WaveAnimationRectangle(showWaterFall: false, percent:percentB, name: "b" )
-                            
-                                .frame(width:modelSize / 2 * CGFloat(sqrt(3)), height: modelSize / 2 * CGFloat(sqrt(3)))
-                                .rotationEffect(.degrees(180))
-                                .rotationEffect(.degrees(0 ))
-                                .offset(x: 0, y: modelSize / 2  + 45)
-                            
-                            
-                            WaveAnimationRectangle(showWaterFall: false, percent:percentA ,name: "a")
-                                .frame(width:modelSize / 2 , height: modelSize / 2 )
-                                .rotationEffect(.degrees(180))
-                                .rotationEffect(.degrees(90 ))
-                                .offset(x: 30 - modelSize / 2 * CGFloat(sqrt(3)) , y: 0)
                         }
-                    )
-                    .frame(width:modelSize / 2 * CGFloat(sqrt(3)), height: modelSize / 2)
-                    .overlay(alignment: .bottom){
-                        Rectangle()
-                            .stroke(lineWidth: 5)
-                            .frame(width: 15, height: 15)
-                            .offset(x: 8 - modelSize / 2 * CGFloat(sqrt(3)) / 2 )
-                    }
-                
+                    
+                    WaveAnimationRectangle(showWaterFall: showWaterFall, percent: percentC, name: "C")
+                        .frame(width: modelSize   ,height: modelSize  )
+                        .rotationEffect(.degrees(-90))
+                        .rotationEffect(.degrees(-60),anchor: .bottomLeading)
+                    
+                    
+                }
+               
+                .position(x:screen.width / 2 + modelSize / 4 ,y:screen.height / 2 - modelSize / 4 )
             }
             .rotationEffect(.degrees(rotate))
-            .padding()
+          
             .onAppear(perform: {
                 
                 self.animate = true
@@ -103,11 +93,10 @@ struct PythagoreanAbout: View {
                     }
                 }
             }
-            .frame(maxWidth: .infinity,maxHeight: .infinity,alignment: .center)
-            
-            .scaleEffect(0.5)
+          
             
         }
+        .frame(maxWidth: .infinity,maxHeight: .infinity,alignment: .center)
         .blur(radius: animate ? 0:10)
         .onDisappear{
             self.animate = false
