@@ -9,8 +9,8 @@ import SwiftUI
 
 struct PythagoreanSimulator: View {
     
-    @State private var a = 100.0
-    @State private var b = 150.0
+    @State private var a = 50.0
+    @State private var b = 50.0
     
     @State private var rotationEffect = 0.0
     
