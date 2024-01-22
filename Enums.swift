@@ -49,7 +49,7 @@ enum AboutInfo {
     var header:String{
         switch self {
         case .pyfagore:
-            "Pythagorean Insight"
+            "Pythagorean Theorem"
         case .atomModel:
          "Decoding the Atom"
         }
