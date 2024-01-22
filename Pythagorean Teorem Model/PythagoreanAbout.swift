@@ -200,10 +200,11 @@ struct WaveAnimationRectangle: View {
         .overlay(content: {
             HStack(spacing:1){
                 Text(name)
-                
-                    .font(.system(size: 25))
+                    .font(.system(size: 20))
+                    .minimumScaleFactor(0.5)
                 Text("2")
-                    .font(.system(size: 15))
+                    .font(.system(size:10))
+                    .minimumScaleFactor(0.5)
                     .baselineOffset(15)
                 
             }
