@@ -133,7 +133,7 @@ struct ImageView:View {
     var body: some View {
         switch info {
         case .pyfagore:
-            PythagoreanAbout()
+            PythagoreanAboutAnimation()
         case .atomModel:
             Image("electron").resizable()
         }

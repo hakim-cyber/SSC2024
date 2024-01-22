@@ -9,96 +9,16 @@ import SwiftUI
 
 
 
-struct PythagoreanAbout: View {
-
-    @State private var percentA = 105.0
-    @State private var percentB = 105.0
-    @State private var percentC =  -10.0
-    
-    @State private var rotate = -40.0
+struct PythagoreanAboutAnimation: View {
     
     @State private var animate = false
     
-    @State private var showWaterFall = false
-    
-    @State private var screen = UIScreen.main.bounds
     var body: some View {
-        GeometryReader{ geo in
-            let size = geo.size
-            let modelSize = min(size.width,size.height) * 0.8
-            VStack(alignment: .center){
-                
-                HStack(alignment:.bottom,spacing: 0){
-                    WaveAnimationRectangle(showWaterFall: false, percent: percentA, name: "a")
-                        .frame(width:modelSize / 2   ,height: modelSize / 2   )
-                        .rotationEffect(.degrees(-90))
-                    Triangle()
-                        .stroke(lineWidth: 1.5)
-                        .frame(width:modelSize / 2  * CGFloat(sqrt(3)), height: modelSize / 2)
-                        .overlay(alignment:.bottom){
-                            WaveAnimationRectangle(showWaterFall: false, percent: percentB, name: "b")
-                                .frame(width: modelSize / 2  * CGFloat(sqrt(3))   ,height: modelSize / 2  * CGFloat(sqrt(3))  )
-                                .rotationEffect(.degrees(180),anchor: .bottom)
-                            
-                        }
-                    
-                    WaveAnimationRectangle(showWaterFall: showWaterFall, percent: percentC, name: "C")
-                        .frame(width: modelSize   ,height: modelSize  )
-                        .rotationEffect(.degrees(-90))
-                        .rotationEffect(.degrees(-60),anchor: .bottomLeading)
-                    
-                    
-                }
-                .rotationEffect(.degrees(rotate),anchor: .bottom)
-                
-               
-            }
+        ZStack{
            
-            .position(x:size.width / 2)
-            .onAppear(perform: {
-                
-                self.animate = true
-                
-            })
-            
-            .onChange(of: animate) {_, newValue in
-                if newValue{
-                    
-                    withAnimation(.easeInOut(duration: 5.5)) {
-                        
-                        self.rotate = 150
-                        
-                    }completion: {
-                        self.showWaterFall = false
-                        self.animate = false
-                    }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5){
-                        withAnimation(.bouncy(duration: 5.5)){
-                            self.showWaterFall = true
-                            self.percentA = -10.0
-                            self.percentC = 99.0 / CGFloat(sqrt(3))
-                        }
-                    }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5){
-                        withAnimation(.bouncy(duration: 5.5)){
-                            self.percentB = -10.0
-                            self.percentC = 105.0
-                        }
-                    }
-                }else{
-                    withAnimation(.easeInOut(duration: 0.5)) {
-                        self.rotate = -40
-                        self.percentA = 105
-                        self.percentC = -10
-                        self.percentB = 105
-                    }
-                }
-            }
-          
+            PythagoreanAnimation(animate: $animate, aWidth: .constant(42), bWidth: .constant(42 * sqrt(3)),showDots: false)
             
         }
-        .scaleEffect(0.35)
-        
         .blur(radius: animate ? 0:10)
         .onDisappear{
             self.animate = false
@@ -172,13 +92,13 @@ struct WaveAnimationRectangle: View {
             ZStack{
                 if  showWaterFall{
                     CurvedLine(reverse: false)
-                        .stroke(.blue,style: .init(lineWidth: showWaterFall ? 5 :2))
+                        .stroke(.blue,style: .init(lineWidth: showWaterFall ? geo.size.width / 14 :4))
                         .frame(width:geo.size.width  , height:geo.size.height)
-                        .transition(.asymmetric(insertion: .scale(scale:0.7).animation(.easeInOut(duration: 0.4)), removal: .identity))
+                        .transition(.asymmetric(insertion: .scale(scale:0.92).animation(.easeInOut(duration: 0.4)), removal: .identity))
                     CurvedLine(reverse: true)
-                        .stroke(.blue,style: .init(lineWidth: showWaterFall ? 10 :4))
+                        .stroke(.blue,style: .init(lineWidth: showWaterFall ? geo.size.width / 14 :4))
                         .frame(width:geo.size.width  , height:geo.size.height)
-                        .transition(.asymmetric(insertion: .scale(scale:0.7).animation(.easeInOut(duration: 0.55)), removal: .identity))
+                        .transition(.asymmetric(insertion: .scale(scale:0.92).animation(.easeInOut(duration: 0.4)), removal: .identity))
                        
                 }
                 
@@ -198,21 +118,23 @@ struct WaveAnimationRectangle: View {
         }
         
         .overlay(content: {
-            HStack(spacing:1){
-                Text(name)
-                    .font(.system(size: 20))
-                    .minimumScaleFactor(0.5)
-                Text("2")
-                    .font(.system(size:10))
-                    .minimumScaleFactor(0.5)
-                    .baselineOffset(15)
-                
+            if name != ""{
+                HStack(spacing:1){
+                    Text(name)
+                        .font(.system(size: 25))
+                        .bold()
+                    Text("2")
+                        .font(.system(size:15))
+                    
+                        .baselineOffset(15)
+                        .bold()
+                }
+                .bold()
+                .foregroundStyle(.white)
             }
-            .bold()
-            .foregroundStyle(.white)
         })
         .onAppear {
-            withAnimation(.linear(duration: 1.5).repeatForever(autoreverses: false)) {
+            withAnimation(.linear(duration: showWaterFall ? 0.75 : 2).repeatForever(autoreverses: false)) {
                 self.waveOffset = Angle(degrees: 360)
             }
         }
