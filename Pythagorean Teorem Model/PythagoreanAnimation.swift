@@ -138,7 +138,7 @@ struct PythagoreanAnimation: View {
                     
                     withAnimation(.easeInOut(duration: 5.5).speed(speed)) {
                         
-                        self.rotate = 135
+                        self.rotate = 130
                         
                     }completion: {
                         self.showWaterFall = false

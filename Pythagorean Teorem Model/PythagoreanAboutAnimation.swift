@@ -20,6 +20,9 @@ struct PythagoreanAboutAnimation: View {
             
         }
         .blur(radius: animate ? 0:10)
+        .onAppear(perform: {
+            self.animate = true
+        })
         .onDisappear{
             self.animate = false
         }
@@ -121,7 +124,7 @@ struct WaveAnimationRectangle: View {
             if name != ""{
                 HStack(spacing:1){
                     Text(name)
-                        .font(.system(size: 25))
+                        .font(.system(size: 22))
                         .bold()
                     Text("2")
                         .font(.system(size:15))

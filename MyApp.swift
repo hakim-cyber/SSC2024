@@ -6,7 +6,14 @@ struct MyApp: App {
     var body: some Scene {
         WindowGroup {
            
-            PythagoreanSimulator()
+            VStack{
+                
+            }
+            .sheet(isPresented: .constant(true), content: {
+                AboutView(info: .pyfagore) {
+                    
+                }
+            })
             .preferredColorScheme(.dark)
           
         }
