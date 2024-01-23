@@ -17,7 +17,7 @@ struct AtomModelOrbit: View {
     var body: some View {
         ZStack{
             Circle()
-                .stroke(lineWidth: 1.0)
+                .stroke(lineWidth: 5.0)
                 .opacity(show ? 1 : 0)
             // Electrons on the Orbit
             RadialLayout{

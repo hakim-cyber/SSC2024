@@ -7,69 +7,16 @@
 
 import SwiftUI
 
-extension AtomModel_View{
-    func customization(size:CGSize) -> some View{
+struct CustomizationView<Content:View>:View {
+    @Binding var show:Bool
+    let size:CGSize
+    @ViewBuilder var content:Content
+    
+    @State  var offsetForCustomization = 0.0
+    var body: some View {
         ZStack{
-          
-            if self.showCustomization{
-                
-                VStack(spacing: 20){
-                    HStack{
-                        Text("Atom")
-                            .bold()
-                            .font(.system(size: 20))
-                        Spacer()
-                        Picker("", selection: $selectedAtomId) {
-                            ForEach(atoms.indices,id:\.self) { atom in
-                                let selected = atoms[atom]
-                                Text(selected.id)
-                                    .tag(atom)
-                                    .bold()
-                                    
-                            }
-                        }
-                        .labelsHidden()
-                       
-                        
-                    }
-                    HStack{
-                        Text("Show Core")
-                        Spacer()
-                        Toggle("", isOn: $showProtonsNeutrons)
-                            .labelsHidden()
-                    }
-                    HStack{
-                        Text("Show Orbits")
-                        Spacer()
-                        Toggle("", isOn: $showOrbits)
-                            .labelsHidden()
-                    }
-                    VStack{
-                        Text("Electrons")
-                            .bold()
-                        
-                        HStack(spacing:15){
-                            Button("+"){
-                                if self.protonsCount - self.electronCount > self.min{
-                                    self.electronCount += 1
-                                    print("+")
-                                }
-                            }
-                            .buttonStyle(.borderedProminent)
-                            .font(.system(size: 24))
-                            .bold()
-                            Button("-"){
-                                if self.protonsCount - self.electronCount < self.max{
-                                    self.electronCount -= 1
-                                    print("-")
-                                }
-                            }
-                            .buttonStyle(.borderedProminent)
-                            .font(.system(size: 24))
-                            .bold()
-                        }
-                    }
-                }
+            if self.show{
+                content
                 .frame(maxWidth: .infinity,maxHeight: .infinity,alignment: .top)
                 .padding(30)
                 .background{
@@ -90,17 +37,18 @@ extension AtomModel_View{
                         .onEnded({ value in
                             if value.translation.width > 10{
                                 withAnimation(.bouncy){
-                                    self.showCustomization = false
+                                    self.show = false
                                 }
                             }
                         })
                     
                 )
+                
             }else{
                 VStack{
                     Button{
                         withAnimation(.bouncy){
-                            self.showCustomization = true
+                            self.show = true
                             self.offsetForCustomization = 0
                         }
                        
@@ -118,12 +66,77 @@ extension AtomModel_View{
                 }
                 .transition(.push(from: .trailing))
                 .frame(height: 250)
+                
             }
-            
         }
         .frame(maxWidth: .infinity,maxHeight: .infinity,alignment: .topTrailing)
         .padding(25)
-       
+    }
+}
+
+
+
+extension AtomModel_View{
+    func customization(size:CGSize) -> some View{
+        CustomizationView(show: $showCustomization, size: size) {
+            VStack(spacing: 20){
+                HStack{
+                    Text("Atom")
+                        .bold()
+                        .font(.system(size: 20))
+                    Spacer()
+                    Picker("", selection: $selectedAtomId) {
+                        ForEach(atoms.indices,id:\.self) { atom in
+                            let selected = atoms[atom]
+                            Text(selected.id)
+                                .tag(atom)
+                                .bold()
+                                
+                        }
+                    }
+                    .labelsHidden()
+                   
+                    
+                }
+                HStack{
+                    Text("Show Core")
+                    Spacer()
+                    Toggle("", isOn: $showProtonsNeutrons)
+                        .labelsHidden()
+                }
+                HStack{
+                    Text("Show Orbits")
+                    Spacer()
+                    Toggle("", isOn: $showOrbits)
+                        .labelsHidden()
+                }
+                VStack{
+                    Text("Electrons")
+                        .bold()
+                    
+                    HStack(spacing:15){
+                        Button("+"){
+                            if self.protonsCount - self.electronCount > self.min{
+                                self.electronCount += 1
+                                print("+")
+                            }
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .font(.system(size: 24))
+                        .bold()
+                        Button("-"){
+                            if self.protonsCount - self.electronCount < self.max{
+                                self.electronCount -= 1
+                                print("-")
+                            }
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .font(.system(size: 24))
+                        .bold()
+                    }
+                }
+            }
+        }
     }
 }
 

@@ -19,7 +19,6 @@ struct AtomModel_View: View {
     
     @State  var max = 1
     @State  var min = -1
-    @State  var offsetForCustomization = 0.0
     @State  var offsetForInfo = 0.0
     @State  var showCustomization = false
     
