@@ -24,7 +24,8 @@ struct CustomizationView<Content:View>:View {
                         .fill(.regularMaterial)
                     
                 }
-                .frame(width:   Swift.min (size.height, size.width) / 1.5 ,height:  Swift.min (size.height, size.width) / 3.1)
+                .frame(width:   Swift.min (size.height, size.width) / 1.5 )
+                .fixedSize(horizontal: false, vertical: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
                 .offset(x:offsetForCustomization)
                 .transition(.move(edge: .trailing))
                 .gesture(
@@ -79,33 +80,43 @@ struct CustomizationView<Content:View>:View {
 extension AtomModel_View{
     func customization(size:CGSize) -> some View{
         CustomizationView(show: $showCustomization, size: size) {
-            VStack(spacing: 20){
+            VStack(spacing: 25){
                 HStack{
                     Text("Atom")
                         .bold()
-                        .font(.system(size: 20))
+                        .font(.system(size:  25)) // Set an initial font size
+                        .minimumScaleFactor(0.5)
                     Spacer()
                     Picker("", selection: $selectedAtomId) {
                         ForEach(atoms.indices,id:\.self) { atom in
                             let selected = atoms[atom]
                             Text(selected.id)
                                 .tag(atom)
+                               
                                 .bold()
-                                
+                                .font(.system(size:  25)) // Set an initial font size
+                                .minimumScaleFactor(0.5)
                         }
                     }
                     .labelsHidden()
+                   
                    
                     
                 }
                 HStack{
                     Text("Show Core")
+                        .bold()
+                        .font(.system(size:  25)) // Set an initial font size
+                        .minimumScaleFactor(0.5)
                     Spacer()
                     Toggle("", isOn: $showProtonsNeutrons)
                         .labelsHidden()
                 }
                 HStack{
                     Text("Show Orbits")
+                        .bold()
+                        .font(.system(size:  25)) // Set an initial font size
+                        .minimumScaleFactor(0.5)
                     Spacer()
                     Toggle("", isOn: $showOrbits)
                         .labelsHidden()
@@ -113,25 +124,34 @@ extension AtomModel_View{
                 VStack{
                     Text("Electrons")
                         .bold()
+                        
                     
                     HStack(spacing:15){
-                        Button("+"){
+                        Button{
                             if self.protonsCount - self.electronCount > self.min{
                                 self.electronCount += 1
                                 print("+")
                             }
+                        }label: {
+                            Text("+")
+                            .padding(5)
                         }
                         .buttonStyle(.borderedProminent)
-                        .font(.system(size: 24))
+                        .font(.system(size:30))
                         .bold()
-                        Button("-"){
+                        Button{
                             if self.protonsCount - self.electronCount < self.max{
                                 self.electronCount -= 1
                                 print("-")
                             }
+                        }label: {
+                            Text("-")
+                            .padding(3)
+                            .padding(.horizontal,4)
                         }
+                       
                         .buttonStyle(.borderedProminent)
-                        .font(.system(size: 24))
+                        .font(.system(size: 35))
                         .bold()
                     }
                 }

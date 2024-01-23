@@ -46,6 +46,11 @@ struct PythagoreanAnimation: View {
                     Triangle()
                         .stroke(lineWidth: 1.5)
                         .frame(width:bWidth , height: aWidth)
+                        .overlay(alignment: .bottomLeading, content: {
+                            Rectangle()
+                                .stroke(lineWidth: 4.5)
+                                .frame(width: c / 7.5,height: c / 7.5)
+                        })
                         .overlay(alignment:.bottom){
                             WaveAnimationRectangle(showWaterFall: false, percent: percentB, name: !showabc ? "" : "b")
                                 .frame(width:bWidth   ,height: bWidth)

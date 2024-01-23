@@ -7,13 +7,8 @@ struct MyApp: App {
         WindowGroup {
            
             VStack{
-                
+                PythagoreanSimulator()
             }
-            .sheet(isPresented: .constant(true), content: {
-                AboutView(info: .pyfagore) {
-                    
-                }
-            })
             .preferredColorScheme(.dark)
           
         }
