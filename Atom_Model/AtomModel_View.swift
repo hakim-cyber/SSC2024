@@ -60,9 +60,9 @@ struct AtomModel_View: View {
                    
                     
                 }
-                .transition(.rotating(angle: 90))
+                
                 .contentShape(Circle())
-                .animation(.easeInOut, value: orbitsCount)
+               
                 .animation(.easeInOut, value: selectedAtomId)
                 
                 .frame(maxWidth: .infinity,maxHeight:.infinity,alignment:.center)
@@ -75,7 +75,7 @@ struct AtomModel_View: View {
                     self.generateRandomPositions(geoSize: size)
                 }
             }
-            .onChange(of: selectedAtomId) { newvalue in
+            .onChange(of: selectedAtomId) { _,newvalue in
                 if newvalue >= 0 && newvalue <= self.atoms.count - 1{
                     let selected = atoms[newvalue]
                     
@@ -326,37 +326,6 @@ struct AtomModel_View: View {
     AtomModel_View()
 }
 
-struct RadialLayout: Layout {
-    func sizeThatFits(
-        proposal: ProposedViewSize,
-        subviews: Subviews,
-        cache: inout ()
-    ) -> CGSize {
-        proposal.replacingUnspecifiedDimensions()
-    }
-
-    func placeSubviews(
-        in bounds: CGRect,
-        proposal: ProposedViewSize,
-        subviews: Subviews,
-        cache: inout ()
-    ) {
-        guard !subviews.isEmpty else { return }
-
-        let radius = Swift.min(bounds.size.width, bounds.size.height) / 2
-        let totalSubviews = subviews.count
-
-        for (index, subview) in subviews.enumerated() {
-            let angle = Double(index) * (2 * .pi) / Double(totalSubviews)
-
-            let xPos = cos(angle) * radius
-            let yPos = sin(angle) * radius
-
-            let point = CGPoint(x: bounds.midX + xPos, y: bounds.midY + yPos)
-            subview.place(at: point, anchor: .center, proposal: .unspecified)
-        }
-    }
-}
 struct Atom {
     let id: String
         let fullName: String
