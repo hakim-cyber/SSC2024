@@ -7,7 +7,7 @@ struct MyApp: App {
         WindowGroup {
            
             VStack{
-                PythagoreanSimulator()
+                CommunicatingVessel()
             }
             .preferredColorScheme(.dark)
           
