@@ -21,15 +21,15 @@ struct CommunicatingVessel: View {
                     Wave(offSet: waveOffset, percent: water)
                         .fill(Color.blue.opacity(0.85).gradient)
                         
-                    Vessel1()
+                    Vessel2()
                         .fill(Color.brown)
                         .stroke(Color.white.opacity(0.6), lineWidth: 5)
                         .colorMultiply(.gray)
                         .overlay(alignment: .top) {
-                            Vessel1Grass()
-                                .stroke(Color.green.opacity(0.6), lineWidth: 10)
-                                .frame(height: 10)
-                                .offset(y:-10)
+                            Vessel2Grass()
+                                .stroke(Color.green.opacity(0.6), lineWidth: 8)
+                                .frame(height: 12)
+                                .offset(y:-12)
                                
                         }
                    
@@ -158,4 +158,35 @@ struct Vessel2:Shape{
         
         return p
     }
+}
+
+struct Vessel2Grass:Shape{
+    func path(in rect: CGRect) -> Path {
+        var p = Path()
+        p.move(to: .init(x: .zero, y: rect.maxY))
+        p.addLine(to:  CGPoint(x: rect.width * 0.15, y: rect.maxY ))
+        
+        p.move(to: CGPoint(x: rect.width * 0.25, y: rect.maxY ))
+        
+        
+        p.addLine(to: CGPoint(x: rect.width * 5 / 16, y: rect.maxY ))
+        
+        
+        p.move(to: CGPoint(x: rect.width * 6 / 16, y: rect.maxY))
+        
+        p.addLine(to: CGPoint(x: rect.width * 9.5 / 16, y: rect.maxY))
+        
+        
+        p.move(to: CGPoint(x: rect.width * 11 / 16, y: rect.maxY))
+        
+        p.addLine(to: CGPoint(x: rect.width * 11.75 / 16, y: rect.maxY))
+        
+      
+        p.move(to: CGPoint(x: rect.width * 13 / 16 , y: rect.maxY ))
+        
+        p.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY ))
+       
+        return p
+    }
+    
 }
