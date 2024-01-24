@@ -21,7 +21,7 @@ struct CommunicatingVessel: View {
                     Wave(offSet: waveOffset, percent: water)
                         .fill(Color.blue.opacity(0.85).gradient)
                         
-                    Vessel1()
+                    Vessel2()
                         .fill(Color.brown)
                         .colorMultiply(.gray)
                    
@@ -79,4 +79,25 @@ struct Vessel1:Shape{
     }
     
     
+}
+
+struct Vessel2:Shape{
+    func path(in rect: CGRect) -> Path {
+        var p = Path()
+        
+        p.move(to: .zero)
+        p.addLine(to: CGPoint(x: rect.width * 0.15, y: .zero ))
+        
+        p.addLine(to: CGPoint(x: rect.width * 0.15, y: rect.height * 0.75 ))
+        
+        p.addLine(to: CGPoint(x: rect.width * 0.75, y: rect.height * 0.75 ))
+        
+        p.addLine(to: CGPoint(x: rect.width * 7 * 0.125, y: rect.height * 0.45 ))
+        p.addLine(to: CGPoint(x: rect.width * 13 / 16, y: rect.height * 0.3 ))
+        p.addLine(to: CGPoint(x: rect.width * 7 * 0.125, y: rect.height * 0.15 ))
+        p.addLine(to: CGPoint(x: rect.width * 13 / 16, y: .zero ))
+        
+        
+        return p
+    }
 }
