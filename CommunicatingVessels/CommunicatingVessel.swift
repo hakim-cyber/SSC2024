@@ -19,10 +19,11 @@ struct CommunicatingVessel: View {
                 Spacer()
                 ZStack{
                     Wave(offSet: waveOffset, percent: water)
-                        .fill(Color.blue)
+                        .fill(Color.blue.opacity(0.85).gradient)
                         
                     Vessel1()
                         .fill(Color.brown)
+                        .colorMultiply(.gray)
                    
                 }
                     .frame(width: UIScreen.main.bounds.width,height: 400)
@@ -33,7 +34,7 @@ struct CommunicatingVessel: View {
         }
         .ignoresSafeArea()
         .onAppear {
-            withAnimation(.linear(duration:  4).repeatForever(autoreverses: false)) {
+            withAnimation(.linear(duration: 3.5 ).repeatForever(autoreverses: false)) {
                 self.waveOffset = Angle(degrees: 360)
             }
         }
