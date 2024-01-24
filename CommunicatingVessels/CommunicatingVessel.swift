@@ -21,10 +21,17 @@ struct CommunicatingVessel: View {
                     Wave(offSet: waveOffset, percent: water)
                         .fill(Color.blue.opacity(0.85).gradient)
                         
-                    Vessel2()
+                    Vessel1()
                         .fill(Color.brown)
-                        .stroke(Color.white.opacity(0.8), lineWidth: 5)
+                        .stroke(Color.white.opacity(0.6), lineWidth: 5)
                         .colorMultiply(.gray)
+                        .overlay(alignment: .top) {
+                            Vessel1Grass()
+                                .stroke(Color.green.opacity(0.6), lineWidth: 10)
+                                .frame(height: 10)
+                                .offset(y:-10)
+                               
+                        }
                    
                 }
                 .frame(width: UIScreen.main.bounds.width + 5,height: 400)
@@ -79,6 +86,26 @@ struct Vessel1:Shape{
         return p
     }
     
+    
+}
+
+struct Vessel1Grass:Shape{
+    func path(in rect: CGRect) -> Path {
+        var p = Path()
+        p.move(to: .init(x: .zero, y: rect.maxY))
+        p.addLine(to:  CGPoint(x: rect.width * 0.2, y: rect.maxY ))
+        
+        p.move(to: CGPoint(x: rect.width * 0.3, y: rect.maxY ))
+        
+        
+        p.addLine(to: CGPoint(x: rect.width * 0.5, y: rect.maxY ))
+        
+        
+        p.move(to: CGPoint(x: rect.width * 0.9, y: rect.maxY  ))
+        
+        p.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY  ))
+        return p
+    }
     
 }
 
