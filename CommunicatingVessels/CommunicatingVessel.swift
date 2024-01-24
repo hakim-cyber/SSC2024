@@ -88,14 +88,20 @@ struct Vessel2:Shape{
         p.move(to: .zero)
         p.addLine(to: CGPoint(x: rect.width * 0.15, y: .zero ))
         
-        p.addLine(to: CGPoint(x: rect.width * 0.15, y: rect.height * 0.75 ))
+        p.addLine(to: CGPoint(x: rect.width * 0.15, y: rect.height * 0.75))
         
         p.addLine(to: CGPoint(x: rect.width * 0.75, y: rect.height * 0.75 ))
         
         p.addLine(to: CGPoint(x: rect.width * 7 * 0.125, y: rect.height * 0.45 ))
-        p.addLine(to: CGPoint(x: rect.width * 13 / 16, y: rect.height * 0.3 ))
+        p.addLine(to: CGPoint(x: rect.width * 13 / 16, y: rect.height * 0.30 ))
         p.addLine(to: CGPoint(x: rect.width * 7 * 0.125, y: rect.height * 0.15 ))
         p.addLine(to: CGPoint(x: rect.width * 13 / 16, y: .zero ))
+        p.addLine(to: CGPoint(x: rect.maxX, y: .zero))
+        p.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+        
+        p.addLine(to: CGPoint(x:.zero, y: rect.maxY))
+        
+        p.addLine(to:.zero)
         
         
         return p
