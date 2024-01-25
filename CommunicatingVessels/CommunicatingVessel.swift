@@ -51,7 +51,7 @@ struct CommunicatingVessel: View {
                 }
                 .frame(width: UIScreen.main.bounds.width + 7,height: screen.height / 2.7)
                 .background{
-                    Color.black
+                    Color.black.frame(height:screen.height / 2.7 - 5)
                 }
                 .clipped()
                     .offset(y:5)
