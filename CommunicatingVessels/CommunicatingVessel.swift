@@ -13,6 +13,7 @@ struct CommunicatingVessel: View {
     
     @Binding var water:Double//20 is zero
     let density:Double
+    let selected:Vessels
     
     @State private var waveOffset = Angle.zero
     @State private var screen = UIScreen.main.bounds
@@ -33,18 +34,33 @@ struct CommunicatingVessel: View {
                       
                         
                         
-                        
-                    Vessel2()
-                        .fill(Color.brown)
-                        .stroke(Color.white.opacity(0.6), lineWidth: 5)
-                        .colorMultiply(.gray)
-                        .overlay(alignment: .top) {
-                            Vessel2Grass()
-                                .stroke(Color.green.opacity(0.6), lineWidth: 8)
-                                .frame(height: 12)
-                                .offset(y:-12)
-                               
-                        }
+                    switch selected{
+                    case .vessel1:
+                       Vessel1()
+                            .fill(Color.brown)
+                            .stroke(Color.white.opacity(0.6), lineWidth: 5)
+                            .colorMultiply(.gray)
+                            .overlay(alignment: .top) {
+                               Vessel1Grass()
+                                    .stroke(Color.green.opacity(0.6), lineWidth: 8)
+                                    .frame(height: 12)
+                                    .offset(y:-12)
+                                   
+                            }
+                    case .vessel2:
+                        Vessel2()
+                            .fill(Color.brown)
+                            .stroke(Color.white.opacity(0.6), lineWidth: 5)
+                            .colorMultiply(.gray)
+                            .overlay(alignment: .top) {
+                                Vessel2Grass()
+                                    .stroke(Color.green.opacity(0.6), lineWidth: 8)
+                                    .frame(height: 12)
+                                    .offset(y:-12)
+                                   
+                            }
+                    }
+                    
                         
                    
                     

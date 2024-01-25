@@ -21,6 +21,9 @@ struct VesselSimulator: View {
     
     @State private var fillTimer: Timer?
     
+    
+    @State private var selectedVessel = Vessels.vessel2
+    
     var pressure:CGFloat{
         let height = (vesselWater - 20) * 3 / 80
         let pressure = height * density * gravity  + (showAtmopshere ? 101325 : 0)
@@ -32,12 +35,37 @@ struct VesselSimulator: View {
                 if showAtmopshere{
                     Color(red: 0.579, green: 0.898, blue: 0.972).ignoresSafeArea()
                 }
-                CommunicatingVessel(water: $vesselWater,density: density)
+                CommunicatingVessel(water: $vesselWater,density: density,selected: selectedVessel)
                    
                        
                 CustomizationView(show: $showCustomize, size: geo.size) {
                     customizeView
                 }
+                VStack(spacing: 15){
+                    ForEach(Vessels.allCases,id:\.rawValue){vessel in
+                        let selected = vessel.rawValue == selectedVessel.rawValue
+                        RoundedRectangle(cornerRadius: 15 )
+                            .stroke(Color.black,lineWidth:8)
+                            .frame(width: 70,height:70)
+                            
+                            .overlay{
+                                Text("\(vessel.rawValue + 1)")
+                                    .bold()
+                                    .font(.system(size: 23))
+                                    .foregroundStyle(.black)
+                            }
+                            .opacity(selected ? 1.0 : 0.5)
+                            .onTapGesture{
+                                if !selected{
+                                   
+                                        self.selectedVessel = vessel
+                                    
+                                }
+                            }
+                    }
+                }
+                .frame(maxWidth: .infinity,maxHeight:.infinity, alignment: .leading)
+                .padding(25)
             }
             .animation(.easeInOut, value: showAtmopshere)
             .onAppear {
@@ -213,6 +241,27 @@ enum Fluids:String, CaseIterable{
             return 1000.0
         case .honey:
             return 1420.0
+        }
+    }
+}
+
+enum Vessels:Int,CaseIterable{
+    case vessel1,vessel2
+    
+    var vessel:any Shape{
+        switch self {
+        case .vessel1:
+            Vessel1()
+        case .vessel2:
+            Vessel2()
+        }
+    }
+    var grass:any Shape{
+        switch self {
+        case .vessel1:
+            Vessel1Grass()
+        case .vessel2:
+            Vessel2Grass()
         }
     }
 }
