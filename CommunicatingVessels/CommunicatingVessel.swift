@@ -6,24 +6,34 @@
 //
 
 import SwiftUI
-
+extension Color {
+    init(hue: Double, saturation: Double, lightness: Double) {
+        self.init(hue: hue, saturation: saturation, brightness: lightness)
+    }
+}
 struct CommunicatingVessel: View {
     
     
     
-    @Binding var water:CGFloat//20 is zero
-    
+    @Binding var water:Double//20 is zero
+    let density:Double
     
     @State private var waveOffset = Angle.zero
     @State private var screen = UIScreen.main.bounds
     var body: some View {
         ZStack{
             VStack{
+               
+
                 
                 Spacer()
                 ZStack{
                     Wave(offSet: waveOffset, percent: water)
-                        .fill(Color.blue.opacity(0.85).gradient)
+                        .fill(colorForWater())
+                        .animation(.easeInOut, value: density)
+                      
+                        
+                        
                         
                     Vessel2()
                         .fill(Color.brown)
@@ -55,12 +65,24 @@ struct CommunicatingVessel: View {
       
         
     }
+    
+    func colorForWater()->Color{
+        if density == 700{
+            
+            return Color.init(uiColor: .darkGray)
+        }else if density > 1400{
+            return Color.orange
+        }else{
+            return Color.blue
+        }
+    }
 }
 /*
  #Preview {
  CommunicatingVessel()
  }
  */
+
 
 struct Vessel1:Shape{
     func path(in rect: CGRect) -> Path {

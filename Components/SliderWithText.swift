@@ -12,6 +12,8 @@ struct SliderWithText:View {
     let text:String
     let range:ClosedRange<Double>
     let step:Double
+    var minValueText:String? = nil
+    var maxValueText:String? = nil
     var body: some View {
         VStack(spacing: 5){
             HStack{
@@ -34,7 +36,14 @@ struct SliderWithText:View {
                 }
             }
            
-            Slider(value: $value,in:range,step: step)
+            Slider(value: $value, in: range,step: step) {
+                
+            } minimumValueLabel: {
+                Text("\(minValueText ?? "")")
+            } maximumValueLabel: {
+                Text("\(maxValueText ?? "")")
+            }
+
                 
         }
         .padding(.vertical,10)
