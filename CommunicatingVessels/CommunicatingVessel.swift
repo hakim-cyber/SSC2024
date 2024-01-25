@@ -9,9 +9,13 @@ import SwiftUI
 
 struct CommunicatingVessel: View {
     
-    @State private var waveOffset = Angle.zero
     
-    @State private var water = 75.0 //20 is zero
+    
+    @Binding var water:CGFloat//20 is zero
+    
+    
+    @State private var waveOffset = Angle.zero
+    @State private var screen = UIScreen.main.bounds
     var body: some View {
         ZStack{
             VStack{
@@ -34,13 +38,14 @@ struct CommunicatingVessel: View {
                         }
                    
                 }
-                .frame(width: UIScreen.main.bounds.width + 5,height: 400)
-                    .clipped()
+                .frame(width: UIScreen.main.bounds.width + 7,height: screen.height / 2.7)
+                .clipped()
                     .offset(y:5)
             }
             
         }
         .ignoresSafeArea()
+        .frame(maxWidth: .infinity)
         .onAppear {
             withAnimation(.linear(duration: 3.5 ).repeatForever(autoreverses: false)) {
                 self.waveOffset = Angle(degrees: 360)

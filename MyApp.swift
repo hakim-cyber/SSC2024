@@ -7,7 +7,7 @@ struct MyApp: App {
         WindowGroup {
            
             VStack{
-                CommunicatingVessel()
+                VesselSimulator()
             }
             .preferredColorScheme(.dark)
           
