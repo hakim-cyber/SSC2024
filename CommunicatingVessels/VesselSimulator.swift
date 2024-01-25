@@ -29,6 +29,9 @@ struct VesselSimulator: View {
     var body: some View {
         GeometryReader{geo in
             ZStack{
+                if showAtmopshere{
+                    Color(red: 0.579, green: 0.898, blue: 0.972).ignoresSafeArea()
+                }
                 CommunicatingVessel(water: $vesselWater,density: density)
                    
                        
@@ -36,6 +39,7 @@ struct VesselSimulator: View {
                     customizeView
                 }
             }
+            .animation(.easeInOut, value: showAtmopshere)
             .onAppear {
                        startFillingTimer()
                 
@@ -91,6 +95,7 @@ struct VesselSimulator: View {
                 
                 Spacer()
                 Text("\(density.formatted())").bold().font(.system(size: 18))
+                   
             }
            
            
@@ -113,6 +118,7 @@ struct VesselSimulator: View {
                 Spacer()
                 Text("\(pressure.formatted())").fontWeight(.heavy).font(.system(size: 23))
                     .foregroundStyle(Color.accentColor)
+                    .contentTransition(.numericText())
             }
             if filling == nil{
                 actionButtons

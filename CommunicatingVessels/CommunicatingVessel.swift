@@ -20,7 +20,7 @@ struct CommunicatingVessel: View {
     @State private var waveTimer: Timer?
     var body: some View {
         ZStack{
-            Color(red: 0.579, green: 0.898, blue: 0.972)
+           
             VStack{
                
 
