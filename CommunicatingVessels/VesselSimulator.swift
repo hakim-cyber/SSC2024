@@ -14,15 +14,24 @@ struct VesselSimulator: View {
     @State private var gravity = 9.8
     @State private var showCustomize = true
     
+    @State private var showAtmopshere = true
+    
     
     @State private var filling:Bool? = nil
     
     @State private var fillTimer: Timer?
+    
+    var pressure:CGFloat{
+        let height = (vesselWater - 20) * 3 / 80
+        let pressure = height * density * gravity  + (showAtmopshere ? 101325 : 0)
+        return pressure
+    }
     var body: some View {
         GeometryReader{geo in
             ZStack{
                 CommunicatingVessel(water: $vesselWater,density: density)
-                
+                   
+                       
                 CustomizationView(show: $showCustomize, size: geo.size) {
                     customizeView
                 }
@@ -34,6 +43,8 @@ struct VesselSimulator: View {
                    .onDisappear {
                        fillTimer?.invalidate()
                    }
+           
+        
         }
         .frame(width: UIScreen.main.bounds.width + 5)
     }
@@ -76,12 +87,26 @@ struct VesselSimulator: View {
             }
             .pickerStyle(.segmented)
             HStack{
-                Text("Density").bold().font(.system(size: 20))
+                Text("Density").bold().font(.system(size: 18))
+                
                 Spacer()
-                Text("\(density.formatted())").bold().font(.system(size: 20))
+                Text("\(density.formatted())").bold().font(.system(size: 18))
             }
-            Divider()
+           
+          
+            
             SliderWithText(value: $gravity, text: "Gravity", range: 3.7...24.9, step: 0.1,minValueText: "Mars",maxValueText: "Jupiter")
+                .contentShape(Rectangle())
+            Rectangle()
+                .frame(height: 1)
+                
+            HStack{
+                Text("Pressure").bold().font(.system(size: 23))
+                
+                Spacer()
+                Text("\(pressure.formatted())").bold().font(.system(size: 23))
+                    .foregroundStyle(Color.accentColor)
+            }
             if filling == nil{
                 actionButtons
                     .padding(.top)

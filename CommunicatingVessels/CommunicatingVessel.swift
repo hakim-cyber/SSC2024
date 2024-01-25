@@ -34,17 +34,18 @@ struct CommunicatingVessel: View {
                         
                         
                         
-                    Vessel1()
+                    Vessel2()
                         .fill(Color.brown)
                         .stroke(Color.white.opacity(0.6), lineWidth: 5)
                         .colorMultiply(.gray)
                         .overlay(alignment: .top) {
-                            Vessel1Grass()
+                            Vessel2Grass()
                                 .stroke(Color.green.opacity(0.6), lineWidth: 8)
                                 .frame(height: 12)
                                 .offset(y:-12)
                                
                         }
+                        
                    
                     
                 }

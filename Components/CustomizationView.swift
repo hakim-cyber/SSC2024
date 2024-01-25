@@ -31,7 +31,7 @@ struct CustomizationView<Content:View>:View {
                 .gesture(
                     DragGesture()
                         .onChanged({ value in
-                            if value.translation.width > 0{
+                            if value.translation.width > 20{
                                 self.offsetForCustomization = value.translation.width
                             }
                         })
