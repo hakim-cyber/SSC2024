@@ -19,7 +19,7 @@ struct SliderWithText:View {
             HStack{
                 Text(text)
                     .bold()
-                    .font(.system(size:  25)) // Set an initial font size
+                    .font(.system(size:  20)) // Set an initial font size
                     .minimumScaleFactor(0.5)
                 Spacer()
                 HStack(alignment: .center){

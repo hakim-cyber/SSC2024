@@ -87,24 +87,31 @@ struct VesselSimulator: View {
             }
             .pickerStyle(.segmented)
             HStack{
-                Text("Density").bold().font(.system(size: 18))
+                Text("Density").bold().font(.system(size: 20))
                 
                 Spacer()
                 Text("\(density.formatted())").bold().font(.system(size: 18))
             }
            
-          
+           
             
             SliderWithText(value: $gravity, text: "Gravity", range: 3.7...24.9, step: 0.1,minValueText: "Mars",maxValueText: "Jupiter")
                 .contentShape(Rectangle())
+            HStack{
+                Text("Atmosphere").bold().font(.system(size: 20))
+                
+                Spacer()
+                Toggle("", isOn: $showAtmopshere)
+                   
+            }
             Rectangle()
                 .frame(height: 1)
                 
             HStack{
-                Text("Pressure").bold().font(.system(size: 23))
+                Text("Pressure").fontWeight(.heavy).font(.system(size: 23))
                 
                 Spacer()
-                Text("\(pressure.formatted())").bold().font(.system(size: 23))
+                Text("\(pressure.formatted())").fontWeight(.heavy).font(.system(size: 23))
                     .foregroundStyle(Color.accentColor)
             }
             if filling == nil{
