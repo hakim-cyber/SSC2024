@@ -40,11 +40,11 @@ struct VesselSimulator: View {
     private func startFillingTimer() {
         fillTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
             if let filling = filling {
-                withAnimation(.easeInOut){
+                withAnimation(.bouncy){
                     if filling {
                         
                         if vesselWater < 100{
-                            vesselWater += 3
+                            vesselWater += 5
                         }else{
                             self.filling = nil
                         }
@@ -54,7 +54,7 @@ struct VesselSimulator: View {
                     } else {
                         
                         if vesselWater > 20{
-                            vesselWater -= 3
+                            vesselWater -= 5
                         }else{
                             self.filling = nil
                         }
@@ -87,6 +87,7 @@ struct VesselSimulator: View {
                     .padding(.top)
             }else{
                 stopButton
+                    .padding(.top)
             }
         }
         

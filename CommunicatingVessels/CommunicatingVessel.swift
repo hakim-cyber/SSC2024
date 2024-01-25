@@ -6,11 +6,7 @@
 //
 
 import SwiftUI
-extension Color {
-    init(hue: Double, saturation: Double, lightness: Double) {
-        self.init(hue: hue, saturation: saturation, brightness: lightness)
-    }
-}
+
 struct CommunicatingVessel: View {
     
     
@@ -24,6 +20,7 @@ struct CommunicatingVessel: View {
     @State private var waveTimer: Timer?
     var body: some View {
         ZStack{
+            Color(red: 0.579, green: 0.898, blue: 0.972)
             VStack{
                
 
@@ -37,22 +34,28 @@ struct CommunicatingVessel: View {
                         
                         
                         
-                    Vessel2()
+                    Vessel1()
                         .fill(Color.brown)
                         .stroke(Color.white.opacity(0.6), lineWidth: 5)
                         .colorMultiply(.gray)
                         .overlay(alignment: .top) {
-                            Vessel2Grass()
+                            Vessel1Grass()
                                 .stroke(Color.green.opacity(0.6), lineWidth: 8)
                                 .frame(height: 12)
                                 .offset(y:-12)
                                
                         }
                    
+                    
                 }
                 .frame(width: UIScreen.main.bounds.width + 7,height: screen.height / 2.7)
+                .background{
+                    Color.black
+                }
                 .clipped()
                     .offset(y:5)
+                    
+                   
             }
           
         }
