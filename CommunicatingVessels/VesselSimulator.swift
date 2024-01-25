@@ -9,13 +9,15 @@ import SwiftUI
 
 
 struct VesselSimulator: View {
-    @State private var vesselWater = 90.0
+    @State private var vesselWater = 25.0//minimum 10
     @State private var density = 1000.0
     @State private var gravity = 9.8
     @State private var showCustomize = true
     
     
     @State private var filling:Bool? = nil
+    
+    @State private var fillTimer: Timer?
     var body: some View {
         GeometryReader{geo in
             ZStack{
@@ -25,8 +27,43 @@ struct VesselSimulator: View {
                     customizeView
                 }
             }
+            .onAppear {
+                       startFillingTimer()
+                
+                   }
+                   .onDisappear {
+                       fillTimer?.invalidate()
+                   }
         }
         .frame(width: UIScreen.main.bounds.width + 5)
+    }
+    private func startFillingTimer() {
+        fillTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
+            if let filling = filling {
+                withAnimation(.easeInOut){
+                    if filling {
+                        
+                        if vesselWater < 100{
+                            vesselWater += 3
+                        }else{
+                            self.filling = nil
+                        }
+                        
+                        
+                        // Adjust the rate at which water is added
+                    } else {
+                        
+                        if vesselWater > 20{
+                            vesselWater -= 3
+                        }else{
+                            self.filling = nil
+                        }
+                        
+                        // Adjust the rate at which water is drained
+                    }
+                }
+            }
+        }
     }
     var customizeView:some View{
         VStack(spacing:25){

@@ -20,6 +20,8 @@ struct CommunicatingVessel: View {
     
     @State private var waveOffset = Angle.zero
     @State private var screen = UIScreen.main.bounds
+    
+    @State private var waveTimer: Timer?
     var body: some View {
         ZStack{
             VStack{
@@ -52,14 +54,19 @@ struct CommunicatingVessel: View {
                 .clipped()
                     .offset(y:5)
             }
-            
+          
         }
         .ignoresSafeArea()
         .frame(maxWidth: .infinity)
         .onAppear {
-            withAnimation(.linear(duration: 3.5 ).repeatForever(autoreverses: false)) {
-                self.waveOffset = Angle(degrees: 360)
+            waveTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
+                withAnimation(.linear(duration: 3.5)){
+                    self.waveOffset += Angle(degrees: 60)
+                }
             }
+        }
+        .onDisappear{
+            self.waveTimer?.invalidate()
         }
        
       
