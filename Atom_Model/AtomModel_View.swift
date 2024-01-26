@@ -13,12 +13,12 @@ struct AtomModel_View: View {
        @State private var protonPositions: [CGSize] = []
     
     @State private var generated = false
-    @State  var protonsCount = 1
-    @State private var neutron = 0
-    @State  var electronCount = 1
+    @State  var protonsCount = 8
+    @State private var neutron = 8
+    @State  var electronCount = 8
     
-    @State  var max = 1
-    @State  var min = -1
+    @State  var max = 2
+    @State  var min = -2
     @State  var offsetForInfo = 0.0
     @State  var showCustomization = false
     
@@ -26,7 +26,7 @@ struct AtomModel_View: View {
     
     @State  var showProtonsNeutrons = true
     
-    @State  var selectedAtomId:Int = 1
+    @State  var selectedAtomId:Int = 0
     
     @State  var showOrbits = true
     
@@ -234,6 +234,7 @@ struct AtomModel_View: View {
         .preferredColorScheme(.dark)
         
         .padding(25)
+        
         
         
         
