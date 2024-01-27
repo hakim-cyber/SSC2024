@@ -17,7 +17,7 @@ struct AtomModelOrbit: View {
     var body: some View {
         ZStack{
             Circle()
-                .stroke(lineWidth: 5.0)
+                .stroke(lineWidth:5.0)
                 .opacity(show ? 1 : 0)
             // Electrons on the Orbit
             RadialLayout{
@@ -41,7 +41,7 @@ struct AtomModelOrbit: View {
                         }
                     }
       
-        .frame(width: (min(geoSize.width,geoSize.height) / 4) * id )
+        .frame(width: (min(geoSize.width,geoSize.height) / 3.5) * id )
        
     }
     func circle(string:String,color:Color,width:CGFloat)->some View{

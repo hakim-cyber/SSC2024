@@ -7,7 +7,7 @@ struct MyApp: App {
         WindowGroup {
            
             VStack{
-                
+               ContentView()
             }
             .sheet(isPresented: .constant(true), content: {
                 AboutView(info: .atomModel){
