@@ -135,7 +135,7 @@ struct ImageView:View {
         case .pyfagore:
             PythagoreanAboutAnimation()
         case .atomModel:
-            Image("electron").resizable()
+            AtomModelAboutAnimation()
         }
     }
         

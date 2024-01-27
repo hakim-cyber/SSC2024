@@ -35,9 +35,9 @@ struct AboutView: View {
                             showSimulator()
                         }label: {
                             HStack{
-                                Text("Open")
+                                Text("Simulator")
                                     .font(.system(size:19))
-                                Image( systemName: "link")
+                                Image( systemName: "arrow.up.forward")
                                     .font(.system(size:14))
                             }
                                 

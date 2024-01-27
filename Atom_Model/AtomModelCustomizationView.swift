@@ -8,7 +8,7 @@
 import SwiftUI
 
 
-extension AtomModel_View{
+extension AtomModel_Simulator{
     func customization(size:CGSize) -> some View{
         CustomizationView(show: $showCustomization, size: size) {
             VStack(spacing: 25){
@@ -59,7 +59,7 @@ extension AtomModel_View{
                     
                     HStack(spacing:15){
                         Button{
-                            if self.protonsCount - self.electronCount > self.min{
+                            if atom.proton - self.electronCount > atom.min{
                                 self.electronCount += 1
                                 print("+")
                             }
@@ -71,7 +71,7 @@ extension AtomModel_View{
                         .font(.system(size:30))
                         .bold()
                         Button{
-                            if self.protonsCount - self.electronCount < self.max{
+                            if atom.proton - self.electronCount < atom.max{
                                 self.electronCount -= 1
                                 print("-")
                             }

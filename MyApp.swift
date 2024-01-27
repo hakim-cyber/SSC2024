@@ -7,8 +7,13 @@ struct MyApp: App {
         WindowGroup {
            
             VStack{
-                AtomModel_View()
+                
             }
+            .sheet(isPresented: .constant(true), content: {
+                AboutView(info: .atomModel){
+                    
+                }
+            })
             .preferredColorScheme(.dark)
           
         }

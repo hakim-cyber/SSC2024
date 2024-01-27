@@ -7,18 +7,13 @@
 
 import SwiftUI
 
-struct AtomModel_View: View {
-    
-    @State private var neutronPositions: [CGSize] = []
-       @State private var protonPositions: [CGSize] = []
-    
+struct AtomModel_Simulator: View {
+  
     @State private var generated = false
-    @State  var protonsCount = 8
-    @State private var neutron = 8
+   
     @State  var electronCount = 8
     
-    @State  var max = 2
-    @State  var min = -2
+    
     @State  var offsetForInfo = 0.0
     @State  var showCustomization = false
     
@@ -29,70 +24,21 @@ struct AtomModel_View: View {
     @State  var selectedAtomId:Int = 0
     
     @State  var showOrbits = true
-    
-    @State private var screen = UIScreen.main.bounds.size
-    
-  
-    
-    
+   
     @State private var scale = 0.5
     @State private var lastScale = 0.5
     
     @State private var offset = CGSize.zero
     @State private var lastOffset = CGSize.zero
+    
+    var atom:Atom{
+        atoms[selectedAtomId]
+    }
     var body: some View {
         GeometryReader{geo in
             let size = geo.size
-            ZStack{
-                let orbitsCount = numberOfOrbits(forElectrons: electronCount)
-                ZStack{
-                    core(geoSize: size)
-                   
-                    ZStack{
-                      
-                       
-                        
-                        ForEach(1...orbitsCount,id:\.self){id in
-                           
-                            AtomModelOrbit(geoSize: size, id:CGFloat(id),electronCount:electronCount, show: showOrbits)
-                        }
-                    }
-                   
-                    
-                }
-                
-                .contentShape(Circle())
-               
-                .animation(.easeInOut, value: selectedAtomId)
-                
-                .frame(maxWidth: .infinity,maxHeight:.infinity,alignment:.center)
-                .offset(x:offset.width,y:offset.height)
-                .scaleEffect(scale * Double(1.0 / (Double(orbitsCount) / 3.0)))
-            }
            
-            .onAppear {
-                if !generated{
-                    self.generateRandomPositions(geoSize: size)
-                }
-            }
-            .onChange(of: selectedAtomId) { _,newvalue in
-                if newvalue >= 0 && newvalue <= self.atoms.count - 1{
-                    let selected = atoms[newvalue]
-                    
-                    
-                    self.protonsCount = selected.proton
-                    self.electronCount = selected.electron
-                    self.neutron = selected.neutron
-                    self.max = selected.max
-                    self.min = selected.min
-                  
-                
-                    self.generateRandomPositions(geoSize: size)
-                  
-                }
-            }
-            
-            
+            AtomModel(size: size, showOrbits: self.showOrbits, showProtonsNeutrons: showProtonsNeutrons, scale: scale, offset: offset, selectedAtomId: selectedAtomId,electronCount: $electronCount)
             
             
             VStack(alignment:.leading, spacing:35){
@@ -104,7 +50,7 @@ struct AtomModel_View: View {
                         .foregroundStyle(.secondary)
                     Text("\(selected.id)").bold().font(.system(size: 60))
                        .font(.system(size: 60))
-                    let ion = protonsCount - electronCount
+                    let ion = atom.proton - self.electronCount
                      
                      Text(" \(ion > 0 ? "+" : "")\(ion)\n")
                             .font(.system(size: 30))
@@ -252,79 +198,11 @@ struct AtomModel_View: View {
         Atom(id: "Ag", fullName: "Silver", proton: 47, neutron: 61, electron: 47, max: 3, min: 0, group: 11),
         Atom(id: "Rh", fullName: "Rhodium", proton: 45, neutron: 58, electron: 45, max: 6, min: -1, group: 9)
     ]
-    
-    func circle(string:String,color:Color,width:CGFloat)->some View{
-        ZStack{
-            Circle()
-                .fill(color)
-                .overlay(alignment: .center) {
-                    Text(string)
-                        .font(.system(size: width / 2.5))
-                        .bold()
-                }
-                .frame(width: width * 0.8,height: width * 0.8)
-        }
-       
-    }
-    func core(geoSize: CGSize) -> some View {
-        let width = Swift.min(geoSize.width,geoSize.height) / 6
-          return  ZStack {
-                if generated && self.showProtonsNeutrons{
-                    ForEach(0..<neutron, id: \.self) { id in
-                        circle(string: "",
-                               color: .yellow,
-                               width: Swift.min(width / CGFloat((neutron + protonsCount)) * 3, geoSize.width / 23))
-                        .offset(neutronPositions[id])
-                    }
-                    ForEach(0..<protonsCount, id: \.self) { id in
-                        circle(string: "+",
-                               color: .green,
-                               width: Swift.min(width / CGFloat((neutron + protonsCount)) * 3, geoSize.width / 23))
-                        .offset(protonPositions[id])
-                    }
-                }else{
-                    let selected = atoms[selectedAtomId]
-                    circle(string: "\(selected.id)", color: .blue, width: geoSize.width / 6.0 / 3.4).foregroundStyle(.white)
-                }
-            }
-            .frame(width:width)
-        }
-
-        private func generateRandomPositions(geoSize: CGSize) {
-            generated = false
-            neutronPositions = (0..<neutron).map { _ in
-                CGSize(width: .random(in: -geoSize.width / 22 ... geoSize.width / 22), height: .random(in: -geoSize.width / 22 ... geoSize.width / 22))
-            }
-
-            protonPositions = (0..<protonsCount).map { _ in
-                CGSize(width: .random(in: -geoSize.width / 22 ... geoSize.width / 22), height: .random(in: -geoSize.width / 22 ... geoSize.width / 22))
-            }
-            generated = true
-        }
-    func numberOfOrbits(forElectrons electrons: Int) -> Int {
-        var orbitCount = 0
-            var remainingElectrons = electronCount
-
-            while remainingElectrons > 0 {
-                let electronsInCurrentOrbit = 2 * orbitCount * orbitCount
-
-                if remainingElectrons >= electronsInCurrentOrbit {
-                    remainingElectrons -= electronsInCurrentOrbit
-                    orbitCount += 1
-                } else {
-                    break
-                }
-            }
-       
-        return Swift.max(orbitCount , 1)
-       
-        
-    }
    
 }
 
 #Preview {
-    AtomModel_View()
+    AtomModel_Simulator()
 }
 
 struct Atom {
