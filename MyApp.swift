@@ -10,7 +10,7 @@ struct MyApp: App {
                ContentView()
             }
             .sheet(isPresented: .constant(true), content: {
-                AboutView(info: .atomModel){
+                AboutView(info: .pyfagore){
                     
                 }
             })

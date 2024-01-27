@@ -41,7 +41,7 @@ extension Subjects{
 
 
 enum AboutInfo {
- case pyfagore, atomModel
+ case pyfagore, atomModel , communicatingVessels
     
     var content: some View{
         ImageView(info: self)
@@ -52,10 +52,41 @@ enum AboutInfo {
             "Pythagorean Theorem"
         case .atomModel:
          "Decoding the Atom"
+        case .communicatingVessels:
+            "Communicating Vessels"
         }
     }
     var aboutText:String{
         switch self {
+        case .communicatingVessels:
+                """
+                🔍 Fluid Equilibrium:
+                The Communicating Vessels Physics Theorem unveils the principles governing fluid equilibrium in interconnected containers. It provides insights into the behavior of liquids when communicating vessels are connected, offering a foundation for understanding fluid dynamics.
+
+                ⚖️ Balancing Act: Equating Heights
+                At its core, the theorem states that in communicating vessels, connected at the bottom and filled with an incompressible fluid, the heights of the fluid columns are equal. This fundamental concept highlights the equilibrium achieved in the system as the fluid seeks a consistent level across connected containers.
+
+                🌊 Fluid Dynamics: Grasping Interconnected Flows
+                Exploring the theorem delves into the fascinating world of fluid dynamics. As fluid moves between vessels, principles of pressure, continuity, and conservation of energy come into play, shaping the dynamic equilibrium observed in the interconnected system.
+
+                🚰 Practical Applications: Beyond the Lab
+                The Communicating Vessels Physics Theorem finds applications in various real-world scenarios. Understanding fluid equilibrium is crucial in fields such as hydraulics, plumbing, and even the design of water distribution systems. The theorem serves as a cornerstone for engineers and scientists dealing with fluid-related phenomena.
+
+                ⚙️ Engineering Insights: Designing with Fluids in Mind
+                Engineers leverage the theorem's principles when designing systems involving interconnected vessels. Whether it's designing fountains, hydraulic systems, or plumbing networks, the theorem guides the creation of structures that maintain fluid balance, ensuring optimal performance.
+
+                📈 Mathematics of Fluids: Calculating Equilibrium
+                Mathematical equations derived from the theorem enable precise calculations of fluid levels in communicating vessels. These equations offer a quantitative understanding of fluid behavior, facilitating predictions and optimizing system designs.
+
+                🔬 Experimental Validation: Hands-On Understanding
+                Laboratory experiments validating the Communicating Vessels Physics Theorem provide students and researchers with hands-on insights. Witnessing fluid equilibrium in action enhances the understanding of theoretical concepts and reinforces the theorem's practical relevance.
+
+                🌐 Interdisciplinary Impact: Fluid Dynamics Across Disciplines
+                Beyond physics, the theorem's principles extend into interdisciplinary domains. From civil engineering to environmental science, the interconnected nature of fluids plays a crucial role, making the theorem a key component in diverse fields.
+
+                🌊 In Conclusion: Navigating Fluid Equilibrium
+                The Communicating Vessels Physics Theorem navigates the intricate world of fluid equilibrium, offering a fundamental understanding of how liquids behave in interconnected systems. Its applications in engineering, mathematics, and beyond underscore its significance in unraveling the mysteries of fluid dynamics.
+                """
         case .pyfagore:
     """
    
@@ -136,6 +167,8 @@ struct ImageView:View {
             PythagoreanAboutAnimation()
         case .atomModel:
             AtomModelAboutAnimation()
+        case .communicatingVessels:
+            Image("vessels").resizable()
         }
     }
         
