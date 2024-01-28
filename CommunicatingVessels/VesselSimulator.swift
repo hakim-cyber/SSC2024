@@ -66,6 +66,7 @@ struct VesselSimulator: View {
                 }
                 .frame(maxWidth: .infinity,maxHeight:.infinity, alignment: .leading)
                 .padding(25)
+                .padding(.bottom,60)
             }
             .animation(.easeInOut, value: showAtmopshere)
             .onAppear {

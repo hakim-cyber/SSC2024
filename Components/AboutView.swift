@@ -17,7 +17,7 @@ struct AboutView: View {
                 LazyVStack(spacing:20){
                     info.content
                         .scaledToFit()
-                        .frame(width: geo.size.width,height:250)
+                        .frame(width: geo.size.width,height:350)
                       
                         .background{
                             Color.init(uiColor: .systemBackground)
@@ -32,7 +32,10 @@ struct AboutView: View {
                         Spacer()
                         Button{
                             // open simulator
-                            showSimulator()
+                            dismiss()
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5){
+                                showSimulator()
+                            }
                         }label: {
                             HStack{
                                 Text("Simulator")

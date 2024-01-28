@@ -7,13 +7,9 @@ struct MyApp: App {
         WindowGroup {
            
             VStack{
-               ContentView()
+                Start_View()
             }
-            .sheet(isPresented: .constant(true), content: {
-                AboutView(info: .pyfagore){
-                    
-                }
-            })
+           
             .preferredColorScheme(.dark)
           
         }

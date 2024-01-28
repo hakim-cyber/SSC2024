@@ -40,11 +40,24 @@ extension Subjects{
 
 
 
-enum AboutInfo {
- case pyfagore, atomModel , communicatingVessels
+enum AboutInfo :String, Identifiable,CaseIterable{
+    var id: String{
+        return self.rawValue
+    }
+ case atomModel , communicatingVessels,pyfagore
     
     var content: some View{
         ImageView(info: self)
+    }
+    var cardImage:Image{
+        switch self {
+        case .pyfagore:
+            Image("pythagoreStart")
+        case .atomModel:
+            Image("atomStart")
+        case .communicatingVessels:
+            Image("vesselsStart")
+        }
     }
     var header:String{
         switch self {
@@ -54,6 +67,17 @@ enum AboutInfo {
          "Decoding the Atom"
         case .communicatingVessels:
             "Communicating Vessels"
+        }
+    }
+    var color:Color{
+        switch self {
+        case .pyfagore:
+            return Color.blue
+        case .communicatingVessels:
+            return Color.green
+        case .atomModel:
+            return Color.red
+        
         }
     }
     var aboutText:String{
