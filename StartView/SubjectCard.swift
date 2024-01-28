@@ -67,7 +67,7 @@ struct SubjectCard: View {
                    
             }
         
-            .frame(width: min / 2.4 ,height:420)
+            .frame(width: min / 2.4 ,height:min / 2)
         .background{
             RoundedRectangle(cornerRadius: 20)
                 .fill(info.color)

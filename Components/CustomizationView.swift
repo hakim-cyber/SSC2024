@@ -24,6 +24,18 @@ struct CustomizationView<Content:View>:View {
                         .fill(.regularMaterial)
                     
                 }
+                .overlay(alignment: .topLeading, content: {
+                    Button{
+                        withAnimation(.easeInOut){
+                            self.offsetForCustomization = 0
+                            self.show = false
+                        }
+                    }label:{
+                       Image(systemName: "xmark")
+                            .padding(15)
+                            .font(.system(size: 20))
+                    }
+                })
                 .frame(width:   Swift.min (size.height, size.width) / 1.5 )
                 .fixedSize(horizontal: false, vertical: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
                 .offset(x:offsetForCustomization)
@@ -31,8 +43,11 @@ struct CustomizationView<Content:View>:View {
                 .gesture(
                     DragGesture()
                         .onChanged({ value in
-                            if value.translation.width > 0{
+                            if value.translation.width > 10{
                                 self.offsetForCustomization = value.translation.width
+                            }else{
+                               
+                                self.offsetForCustomization = 0
                             }
                         })
                         .onEnded({ value in
@@ -72,6 +87,7 @@ struct CustomizationView<Content:View>:View {
         }
         .frame(maxWidth: .infinity,maxHeight: .infinity,alignment: .topTrailing)
         .padding(25)
+        
     }
 }
 

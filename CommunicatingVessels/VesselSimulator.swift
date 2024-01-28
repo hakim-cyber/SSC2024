@@ -24,6 +24,7 @@ struct VesselSimulator: View {
     
     @State private var selectedVessel = Vessels.vessel2
     
+    @State private var screen = UIScreen.main.bounds
     var pressure:CGFloat{
         let height = (vesselWater - 20) * 3 / 80
         let pressure = height * density * gravity  + (showAtmopshere ? 101325 : 0)
@@ -79,7 +80,19 @@ struct VesselSimulator: View {
            
         
         }
-        .frame(width: UIScreen.main.bounds.width + 5)
+        .frame(width: screen.width + 5)
+        .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+                       
+                   // Give a moment for the screen boundaries to change after
+                   // the device is rotated
+                   Task { @MainActor in
+                       try await Task.sleep(for: .seconds(0.001))
+                       withAnimation{
+                           self.screen = UIScreen.main.bounds
+                       }
+                   }
+               }
+       
     }
     private func startFillingTimer() {
         fillTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in

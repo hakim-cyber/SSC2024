@@ -20,32 +20,33 @@ struct CommunicatingVessel: View {
     
     @State private var waveTimer: Timer?
     var body: some View {
+        GeometryReader{geo in
         ZStack{
-           
+            
             VStack{
-               
-
+                
+                
                 
                 Spacer()
                 ZStack{
                     Wave(offSet: waveOffset, percent: water)
                         .fill(colorForWater())
                         .animation(.easeInOut, value: density)
-                      
-                        
-                        
+                    
+                    
+                    
                     switch selected{
                     case .vessel1:
-                       Vessel1()
+                        Vessel1()
                             .fill(Color.brown)
                             .stroke(Color.white.opacity(0.6), lineWidth: 5)
                             .colorMultiply(.gray)
                             .overlay(alignment: .top) {
-                               Vessel1Grass()
+                                Vessel1Grass()
                                     .stroke(Color.green.opacity(0.6), lineWidth: 8)
                                     .frame(height: 12)
                                     .offset(y:-12)
-                                   
+                                
                             }
                     case .vessel2:
                         Vessel2()
@@ -57,24 +58,24 @@ struct CommunicatingVessel: View {
                                     .stroke(Color.green.opacity(0.6), lineWidth: 8)
                                     .frame(height: 12)
                                     .offset(y:-12)
-                                   
+                                
                             }
                     }
                     
-                        
-                   
+                    
+                    
                     
                 }
-                .frame(width: UIScreen.main.bounds.width + 7,height: screen.height / 2.7)
+                .frame(width:geo.size.width + 7,height: geo.size.height / 2.7)
                 .background{
                     Color.black.frame(height:screen.height / 2.7 - 5)
                 }
                 .clipped()
-                    .offset(y:5)
-                    
-                   
+                .offset(y:5)
+                
+                
             }
-          
+            
         }
         .ignoresSafeArea()
         .frame(maxWidth: .infinity)
@@ -88,8 +89,8 @@ struct CommunicatingVessel: View {
         .onDisappear{
             self.waveTimer?.invalidate()
         }
-       
-      
+        
+    }
         
     }
     
