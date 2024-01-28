@@ -18,7 +18,7 @@ struct CustomizationView<Content:View>:View {
             if self.show{
                 content
                 .frame(maxWidth: .infinity,maxHeight: .infinity,alignment: .top)
-                .padding(30)
+                .padding(40)
                 .background{
                     RoundedRectangle(cornerRadius: 10.0)
                         .fill(.regularMaterial)
@@ -27,8 +27,9 @@ struct CustomizationView<Content:View>:View {
                 .overlay(alignment: .topLeading, content: {
                     Button{
                         withAnimation(.easeInOut){
-                            self.offsetForCustomization = 0
+                           
                             self.show = false
+                          
                         }
                     }label:{
                        Image(systemName: "xmark")
