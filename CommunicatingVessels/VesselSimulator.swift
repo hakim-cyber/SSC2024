@@ -12,7 +12,7 @@ struct VesselSimulator: View {
     @State private var vesselWater = 25.0//minimum 10
     @State private var density = 1000.0
     @State private var gravity = 9.8
-    @State private var showCustomize = true
+    @State private var showCustomize = false
     
     @State private var showAtmopshere = true
     

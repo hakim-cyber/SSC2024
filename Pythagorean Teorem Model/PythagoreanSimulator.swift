@@ -16,7 +16,7 @@ struct PythagoreanSimulator: View {
     
     @State private var showabc = true
     
-    @State private var showCustomization = true
+    @State private var showCustomization = false
     
     @State private var scale = 1.0
     @State private var lastScale = 1.0

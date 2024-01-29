@@ -75,7 +75,7 @@ struct CustomizationView<Content:View>:View {
                                 .fill(.regularMaterial)
                             
                             
-                            Image(systemName: "chevron.backward.2")
+                            Image(systemName: "slider.horizontal.3")
                                 .bold()
                         }
                         .frame(width:50,height: 150)
