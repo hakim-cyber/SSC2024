@@ -9,12 +9,12 @@ import SwiftUI
 
 
 struct VesselSimulator: View {
-    @State private var vesselWater = 25.0//minimum 10
+    @State private var vesselWater = 45.0//minimum 10
     @State private var density = 1000.0
     @State private var gravity = 9.8
-    @State private var showCustomize = false
+    @State private var showCustomize = true
     
-    @State private var showAtmopshere = true
+    @State private var showAtmopshere = false
     
     
     @State private var filling:Bool? = nil
