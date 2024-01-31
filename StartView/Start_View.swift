@@ -10,10 +10,12 @@ import SwiftUI
 struct Start_View: View {
     @State private var selected:AboutInfo? = nil
     @State private var path = NavigationPath()
+    @State var screen = UIScreen.main.bounds
     var body: some View {
         NavigationStack(path: $path){
             ScrollView(.vertical,showsIndicators: false){
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 370, maximum: 370)),GridItem(.adaptive(minimum: 370, maximum: 370))]){
+                let min = min(screen.width, screen.height)
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: min / 2.3, maximum: min / 2.3)),GridItem(.adaptive(minimum: min / 2.4, maximum: min / 2.3))]){
                 
                
                     
