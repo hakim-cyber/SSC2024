@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TipKit
 
 struct AtomModel_Simulator: View {
   
@@ -147,41 +148,54 @@ struct AtomModel_Simulator: View {
             .inspector(isPresented: $showCustomization){
                 customization()
                     .inspectorColumnWidth(min:250,ideal: geo.size.width / 3 ,max:400)
-                    .toolbar{
-                        
-                        ToolbarItem(placement: .topBarTrailing) {
-                            Button{
-                                withAnimation(.bouncy){
-                                    if !self.showInfo{
-                                        self.showCustomization = false
-                                        self.showInfo = true
-                                    }else{
-                                        
-                                        self.showInfo = false
-                                    }
-                                }                }label: {
-                                Label("Customize",systemImage: "info.bubble")
-                            }
-                        }
-                        ToolbarItem(placement: .topBarTrailing) {
-                            Button{
-                                withAnimation(.bouncy){
-                                    self.showInfo  = false
-                                    self.showCustomization.toggle()
-                                }
-                            }label: {
-                                Label("Customize",systemImage: "slider.horizontal.3")
-                            }
-                        }
-                       
-                        
-                    }
+               
                     
             }
+            .toolbar{
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button{
+                        withAnimation(.bouncy){
+                            if !self.showInfo{
+                                self.showCustomization = false
+                                self.showInfo = true
+                            }else{
+                                
+                                self.showInfo = false
+                            }
+                        }                }label: {
+                        Image(systemName: "info.bubble")
+                               
+                                
+                    }
+                       
+                       
+                       
+                }
+               
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button{
+                        withAnimation(.bouncy){
+                            self.showInfo  = false
+                            self.showCustomization.toggle()
+                        }
+                    }label: {
+                        Image(systemName: "slider.horizontal.3")
+                           
+                    }
+                    .popoverTip(StartTip(text: "Open Customize"))
+                }
+               
+                
+            }
+          
            
             .navigationTitle(AboutInfo.atomModel.header)
             .navigationBarTitleDisplayMode(.inline)
+            
         }
+     
        
         .contentShape(Rectangle())
         .gesture(
@@ -254,3 +268,16 @@ struct Atom {
         }
 }
 
+
+struct StartTip:Tip{
+    let text:String
+   
+    var title: Text{
+        Text(text)
+            .bold()
+        
+    }
+   
+    
+
+}

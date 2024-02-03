@@ -6,13 +6,13 @@
 //
 
 import SwiftUI
-
+import TipKit
 
 struct VesselSimulator: View {
     @State private var vesselWater = 45.0//minimum 10
     @State private var density = 1000.0
     @State private var gravity = 9.8
-    @State private var showCustomize = true
+    @State private var showCustomize = false
     
     @State private var showAtmopshere = false
     
@@ -71,7 +71,7 @@ struct VesselSimulator: View {
                 .animation(.easeInOut, value: showAtmopshere)
                 .onAppear {
                     startFillingTimer()
-                    
+                  
                 }
                 .onDisappear {
                     fillTimer?.invalidate()
@@ -81,19 +81,21 @@ struct VesselSimulator: View {
                         customizeView
                            
                     }
-                    .toolbar{
-                        
-                        ToolbarItem(placement: .topBarTrailing) {
-                            Button{
-                                self.showCustomize.toggle()
-                            }label: {
-                                Label("Customize",systemImage: "slider.horizontal.3")
-                            }
-                        }
-                        
-                        
-                    }
+                   
                     .inspectorColumnWidth(min:250,ideal: geo.size.width / 2.5 ,max:400)
+                    
+                }
+                .toolbar{
+                    
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button{
+                            self.showCustomize.toggle()
+                        }label: {
+                           Image(systemName: "slider.horizontal.3")
+                        }
+                        .popoverTip(StartTip(text: "Open Customize"))
+                    }
+                    
                     
                 }
                

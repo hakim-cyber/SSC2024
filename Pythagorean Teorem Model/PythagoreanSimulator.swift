@@ -4,7 +4,7 @@
 //
 //  Created by aplle on 1/20/24.
 //
-
+import TipKit
 import SwiftUI
 
 struct PythagoreanSimulator: View {
@@ -16,7 +16,7 @@ struct PythagoreanSimulator: View {
     
     @State private var showabc = true
     
-    @State private var showCustomization = true
+    @State private var showCustomization = false
     
     @State private var scale = 1.0
     @State private var lastScale = 1.0
@@ -104,14 +104,17 @@ struct PythagoreanSimulator: View {
                 .frame(maxWidth: .infinity,maxHeight:.infinity,alignment:.topLeading)
                 
             }
+          
             .toolbar{
                 
                 Spacer()
                 Button{
                     self.showCustomization.toggle()
                 }label: {
-                    Label("Customize",systemImage: "slider.horizontal.3")
+                    Image(systemName: "slider.horizontal.3")
+                        .popoverTip(StartTip(text: "Open Customize"))
                 }
+                
                 
             }
             .inspector(isPresented: $showCustomization){
