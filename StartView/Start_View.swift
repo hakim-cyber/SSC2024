@@ -18,9 +18,11 @@ struct Start_View: View {
                     Spacer()
                     Text("Scientific Wonders: From Pythagoras to Atoms")
                         .fontWeight(.heavy)
-                        .font(.system(size: 30))
+                        .font(.system(size: 26))
                         .minimumScaleFactor(0.5)
                         .fontDesign(.rounded)
+                        .fixedSize()
+                        
                     Spacer()
                     
                 }
@@ -49,6 +51,7 @@ struct Start_View: View {
               
                 .navigationBarTitleDisplayMode(/*@START_MENU_TOKEN@*/.automatic/*@END_MENU_TOKEN@*/)
                 .padding(.top,70)
+               
             }
             .navigationDestination(for: AboutInfo.self) { info in
                 switch info {
