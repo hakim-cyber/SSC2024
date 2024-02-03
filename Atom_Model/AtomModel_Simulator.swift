@@ -63,7 +63,7 @@ struct AtomModel_Simulator: View {
                     .baselineOffset(5.0) // Adjust the value to fine-tune the position
                     .foregroundColor(.primary)
                     .bold()
-                    
+                    .padding(15)
                     .onTapGesture {
                         withAnimation(.bouncy){
                             if !self.showInfo{
@@ -114,7 +114,7 @@ struct AtomModel_Simulator: View {
                     
                 }
                 .frame(maxWidth:.infinity,maxHeight:.infinity,alignment:.topLeading)
-                
+                .padding(15)
                 
                 if showInfo{
                     let value = Swift.min (size.height, size.width)
@@ -147,37 +147,38 @@ struct AtomModel_Simulator: View {
             .inspector(isPresented: $showCustomization){
                 customization()
                     .inspectorColumnWidth(min:250,ideal: geo.size.width / 3 ,max:400)
+                    .toolbar{
+                        
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button{
+                                withAnimation(.bouncy){
+                                    if !self.showInfo{
+                                        self.showCustomization = false
+                                        self.showInfo = true
+                                    }else{
+                                        
+                                        self.showInfo = false
+                                    }
+                                }                }label: {
+                                Label("Customize",systemImage: "info.bubble")
+                            }
+                        }
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button{
+                                withAnimation(.bouncy){
+                                    self.showInfo  = false
+                                    self.showCustomization.toggle()
+                                }
+                            }label: {
+                                Label("Customize",systemImage: "slider.horizontal.3")
+                            }
+                        }
+                       
+                        
+                    }
                     
             }
-            .toolbar{
-                
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button{
-                        withAnimation(.bouncy){
-                            if !self.showInfo{
-                                self.showCustomization = false
-                                self.showInfo = true
-                            }else{
-                                
-                                self.showInfo = false
-                            }
-                        }                }label: {
-                        Label("Customize",systemImage: "info.bubble")
-                    }
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button{
-                        withAnimation(.bouncy){
-                            self.showInfo  = false
-                            self.showCustomization.toggle()
-                        }
-                    }label: {
-                        Label("Customize",systemImage: "slider.horizontal.3")
-                    }
-                }
-               
-                
-            }
+           
             .navigationTitle(AboutInfo.atomModel.header)
             .navigationBarTitleDisplayMode(.inline)
         }
@@ -212,7 +213,7 @@ struct AtomModel_Simulator: View {
        
         .preferredColorScheme(.dark)
         
-        .padding(25)
+       
         
         
         

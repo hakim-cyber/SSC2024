@@ -100,6 +100,7 @@ struct PythagoreanSimulator: View {
                     
                 }
                 .padding(.top)
+                .padding(15)
                 .frame(maxWidth: .infinity,maxHeight:.infinity,alignment:.topLeading)
                 
             }
