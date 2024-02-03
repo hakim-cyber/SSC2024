@@ -24,7 +24,7 @@ struct Start_View: View {
                     Spacer()
                     
                 }
-                .padding(60)
+                .padding([.horizontal,.top],60)
                 let min = min(screen.width, screen.height)
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: min / 2.3, maximum: min / 2.3)),GridItem(.adaptive(minimum: min / 2.4, maximum: min / 2.3))]){
                 
