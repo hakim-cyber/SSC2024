@@ -64,7 +64,7 @@ enum AboutInfo :String, Identifiable,CaseIterable{
         case .pyfagore:
             "Pythagorean Theorem"
         case .atomModel:
-         "Decoding the Atom"
+         "Atomic Model"
         case .communicatingVessels:
             "Communicating Vessels"
         }
