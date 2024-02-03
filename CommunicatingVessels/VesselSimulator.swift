@@ -168,6 +168,7 @@ struct VesselSimulator: View {
             
             SliderWithText(value: $gravity, text: "Gravity", range: 3.7...24.9, step: 0.1,minValueText: "Mars",maxValueText: "Jupiter")
                 .contentShape(Rectangle())
+                
             HStack{
                 Text("Atmosphere").bold().font(.system(size: 20))
                 
