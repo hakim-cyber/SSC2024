@@ -14,6 +14,17 @@ struct Start_View: View {
     var body: some View {
         NavigationStack(path: $path){
             ScrollView(.vertical,showsIndicators: false){
+                HStack{
+                    Spacer()
+                    Text("Scientific Wonders: From Pythagoras to Atoms")
+                        .fontWeight(.heavy)
+                        .font(.system(size: 30))
+                        .minimumScaleFactor(0.5)
+                        .fontDesign(.rounded)
+                    Spacer()
+                    
+                }
+                .padding(60)
                 let min = min(screen.width, screen.height)
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: min / 2.3, maximum: min / 2.3)),GridItem(.adaptive(minimum: min / 2.4, maximum: min / 2.3))]){
                 
@@ -35,7 +46,7 @@ struct Start_View: View {
                     
                     
                 }
-                .navigationTitle("Learn Visually")
+              
                 .navigationBarTitleDisplayMode(/*@START_MENU_TOKEN@*/.automatic/*@END_MENU_TOKEN@*/)
                 .padding(.top,70)
             }

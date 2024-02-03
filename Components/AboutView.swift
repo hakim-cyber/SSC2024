@@ -54,13 +54,14 @@ struct AboutView: View {
                     }
                     HStack{
                         Text(info.aboutText)
-                            .font(.system(size: 20))
+                            .font(.system(size: 23))
                             .fontWeight(.bold)
-                            .monospaced()
+                            .fontDesign(.rounded)
                             .foregroundStyle(Color.secondary)
                             .multilineTextAlignment(.leading)
                             .padding(.horizontal)
                             .padding(.trailing,20)
+                            .padding(.top)
                         Spacer()
                     }
                 }
