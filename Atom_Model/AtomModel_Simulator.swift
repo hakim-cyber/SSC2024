@@ -11,7 +11,7 @@ struct AtomModel_Simulator: View {
   
     @State private var generated = false
    
-    @State  var electronCount = 8
+    @State  var electronCount = 1
     
     
     @State  var offsetForInfo = 0.0
@@ -21,7 +21,7 @@ struct AtomModel_Simulator: View {
     
     @State  var showProtonsNeutrons = true
     
-    @State  var selectedAtomId:Int = 0
+    @State  var selectedAtomId:Int = 1
     
     @State  var showOrbits = true
    
