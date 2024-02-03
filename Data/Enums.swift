@@ -54,7 +54,7 @@ enum AboutInfo :String, Identifiable,CaseIterable{
         case .atomModel:
             "John Dalton"
         case .communicatingVessels:
-            "Blaise Pascal"
+            "Simon Stevin"
         case .pyfagore:
             "Pythagoras of Samos"
         }
