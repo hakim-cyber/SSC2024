@@ -18,7 +18,7 @@ struct CustomizationView<Content:View>:View {
             if self.show{
                 content
                 .frame(maxWidth: .infinity,maxHeight: .infinity,alignment: .top)
-                .padding(40)
+                .padding(50)
                 .background{
                     RoundedRectangle(cornerRadius: 10.0)
                         .fill(.regularMaterial)
@@ -34,7 +34,7 @@ struct CustomizationView<Content:View>:View {
                     }label:{
                        Image(systemName: "xmark")
                             .padding(15)
-                            .font(.system(size: 20))
+                            .font(.system(size: 25))
                     }
                 })
                 .frame(width:   Swift.min (size.height, size.width) / 1.5 )
@@ -42,14 +42,9 @@ struct CustomizationView<Content:View>:View {
                 .offset(x:offsetForCustomization)
                 .transition(.move(edge: .trailing))
                 .gesture(
-                    DragGesture()
+                    DragGesture(minimumDistance: 10)
                         .onChanged({ value in
-                            if value.translation.width > 10{
-                                self.offsetForCustomization = value.translation.width
-                            }else{
-                               
-                                self.offsetForCustomization = 0
-                            }
+                           
                         })
                         .onEnded({ value in
                             if value.translation.width > 10{
