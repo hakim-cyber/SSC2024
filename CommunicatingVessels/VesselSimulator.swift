@@ -45,14 +45,14 @@ struct VesselSimulator: View {
                         ForEach(Vessels.allCases,id:\.rawValue){vessel in
                             let selected = vessel.rawValue == selectedVessel.rawValue
                             RoundedRectangle(cornerRadius: 15 )
-                                .stroke(showAtmopshere ?  Color.black : Color.white,lineWidth:8)
+                                .stroke(Color.primary,lineWidth:8)
                                 .frame(width: 70,height:70)
                             
                                 .overlay{
                                     Text("\(vessel.rawValue + 1)")
                                         .bold()
                                         .font(.system(size: 23))
-                                        .foregroundStyle(showAtmopshere ?  Color.black : Color.white)
+                                      
                                 }
                                 .opacity(selected ? 1.0 : 0.5)
                                 .onTapGesture{
@@ -93,7 +93,7 @@ struct VesselSimulator: View {
                         
                         
                     }
-                    .inspectorColumnWidth(min:250,ideal: geo.size.width / 3 ,max:400)
+                    .inspectorColumnWidth(min:250,ideal: geo.size.width / 2.5 ,max:400)
                     
                 }
                

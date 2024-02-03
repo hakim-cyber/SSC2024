@@ -17,7 +17,7 @@ struct CustomizationView<Content:View>:View {
         ZStack{
                 content
                 .frame(maxWidth: .infinity,maxHeight: .infinity,alignment: .top)
-                .padding(.horizontal,30)
+                .padding(30)
         }
        
       

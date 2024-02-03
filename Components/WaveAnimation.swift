@@ -52,12 +52,12 @@ struct WaveAnimationRectangle: View {
                         .bold()
                     Text("2")
                         .font(.system(size:15))
-                    
+                        
                         .baselineOffset(15)
                         .bold()
                 }
                 .bold()
-                .foregroundStyle(.white)
+                .foregroundStyle(.primary)
             }
         })
         .onAppear {

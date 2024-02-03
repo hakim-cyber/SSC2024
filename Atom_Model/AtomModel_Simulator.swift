@@ -158,6 +158,7 @@ struct AtomModel_Simulator: View {
                                 self.showCustomization = false
                                 self.showInfo = true
                             }else{
+                                
                                 self.showInfo = false
                             }
                         }                }label: {
@@ -166,7 +167,10 @@ struct AtomModel_Simulator: View {
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button{
-                        self.showCustomization.toggle()
+                        withAnimation(.bouncy){
+                            self.showInfo  = false
+                            self.showCustomization.toggle()
+                        }
                     }label: {
                         Label("Customize",systemImage: "slider.horizontal.3")
                     }

@@ -68,7 +68,7 @@ struct CommunicatingVessel: View {
                 }
                 .frame(width:geo.size.width + 7,height: geo.size.height / 2.7)
                 .background{
-                    Color.black.frame(height:screen.height / 2.7 - 5)
+                    Color.init(uiColor: UIColor.systemBackground).frame(height:screen.height / 2.7 - 5)
                 }
                 .clipped()
                 .offset(y:5)

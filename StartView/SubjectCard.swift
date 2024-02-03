@@ -18,7 +18,7 @@ struct SubjectCard: View {
                 ZStack{
                     info.color
                     
-                    Blur(style: .systemChromeMaterial)
+                    Blur(style: .dark)
                         .frame(maxWidth: .infinity,maxHeight: .infinity,alignment: .top)
                         .cornerRadius(20)
                     info.cardImage.resizable().scaledToFit()
@@ -33,10 +33,10 @@ struct SubjectCard: View {
                            
                         HStack{
                             Text(info.header)
-                                .foregroundStyle(Color.white)
-                                .fontWeight(.black)
+                                .foregroundStyle(Color.primary)
+                                .fontWeight(.heavy)
                                 .fontDesign(.rounded)
-                                .font(.system(size: 29))
+                                .font(.system(size: 24))
                                 .fixedSize(horizontal: false, vertical: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
                                 .padding()
                                 .multilineTextAlignment(.leading)

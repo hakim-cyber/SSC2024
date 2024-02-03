@@ -58,7 +58,7 @@ struct PythagoreanAnimation: View {
                                 .overlay(alignment: .bottomLeading, content: {
                                     if showDots && !self.animate{
                                         Circle()
-                                            .fill(.white)
+                                            .fill(Color.primary)
                                             .frame(width: 25)
                                             .padding(-10)
                                             .gesture(
@@ -85,7 +85,7 @@ struct PythagoreanAnimation: View {
                         .overlay(alignment: .topTrailing, content: {
                             if showDots && !self.animate{
                                 Circle()
-                                    .fill(.white)
+                                    .fill(Color.primary)
                                     .frame(width: 25)
                                     .padding(-10)
                                     .gesture(
@@ -107,7 +107,7 @@ struct PythagoreanAnimation: View {
                         .overlay(alignment: .topLeading, content: {
                             if showDots && !self.animate{
                                 Circle()
-                                    .fill(.white)
+                                    .fill(Color.primary)
                                     .frame(width: 25)
                                     .padding(-10)
                                     .gesture(
