@@ -10,8 +10,9 @@ import SwiftUI
 struct SubjectCard: View {
     let info:AboutInfo
     
+    @State private var screen = UIScreen.main.bounds
     var body: some View {
-        let screen = UIScreen.main.bounds
+        
         let min = min(screen.width, screen.height)
             GeometryReader{geo in
                
@@ -32,14 +33,20 @@ struct SubjectCard: View {
                             .frame(maxWidth: .infinity,maxHeight: .infinity,alignment: .top)
                            
                         HStack{
-                            Text(info.header)
-                                .foregroundStyle(Color.primary)
-                                .fontWeight(.heavy)
-                                .fontDesign(.rounded)
-                                .font(.system(size: 24))
-                                .fixedSize(horizontal: false, vertical: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
-                                .padding()
-                                .multilineTextAlignment(.leading)
+                            VStack(alignment: .leading,spacing: 10){
+                                Text(info.header)
+                                    .fontWeight(.heavy)
+                                    .font(.system(size: 22))
+                                
+                                Text(info.inventor)
+                                    .fontWeight(.regular)
+                                    .font(.system(size: 16))
+                            }
+                            .foregroundStyle(Color.primary)
+                            .fontDesign(.rounded)
+                            .fixedSize(horizontal: false, vertical: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+                            .padding()
+                            .multilineTextAlignment(.leading)
                             Spacer()
                             Text("View")
                                 .foregroundStyle(Color.accentColor)
@@ -72,6 +79,17 @@ struct SubjectCard: View {
             RoundedRectangle(cornerRadius: 20)
                 .fill(info.color)
                 
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+            
+            // Give a moment for the screen boundaries to change after
+            // the device is rotated
+            Task { @MainActor in
+                try await Task.sleep(for: .seconds(0.001))
+                withAnimation{
+                    self.screen = UIScreen.main.bounds
+                }
+            }
         }
         
     }

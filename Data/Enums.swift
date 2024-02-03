@@ -49,6 +49,16 @@ enum AboutInfo :String, Identifiable,CaseIterable{
     var content: some View{
         ImageView(info: self)
     }
+    var inventor:String{
+        switch self {
+        case .atomModel:
+            "John Dalton"
+        case .communicatingVessels:
+            "Blaise Pascal"
+        case .pyfagore:
+            "Pythagoras of Samos"
+        }
+    }
     var cardImage:Image{
         switch self {
         case .pyfagore:
