@@ -9,8 +9,8 @@ import SwiftUI
 
 
 extension AtomModel_Simulator{
-    func customization(size:CGSize) -> some View{
-        CustomizationView(show: $showCustomization, size: size) {
+    func customization() -> some View{
+        CustomizationView(show: $showCustomization) {
             VStack(spacing: 25){
                 HStack{
                     Text("Atom")

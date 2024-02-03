@@ -9,80 +9,18 @@ import SwiftUI
 
 struct CustomizationView<Content:View>:View {
     @Binding var show:Bool
-    let size:CGSize
+  
     @ViewBuilder var content:Content
     
     @State  var offsetForCustomization = 0.0
     var body: some View {
         ZStack{
-            if self.show{
                 content
                 .frame(maxWidth: .infinity,maxHeight: .infinity,alignment: .top)
-                .padding(50)
-                .background{
-                    RoundedRectangle(cornerRadius: 10.0)
-                        .fill(.regularMaterial)
-                    
-                }
-                .overlay(alignment: .topLeading, content: {
-                    Button{
-                        withAnimation(.easeInOut){
-                           
-                            self.show = false
-                          
-                        }
-                    }label:{
-                       Image(systemName: "xmark")
-                            .padding(15)
-                            .font(.system(size: 25))
-                    }
-                })
-                .frame(width:   Swift.min (size.height, size.width) / 1.5 )
-                .fixedSize(horizontal: false, vertical: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
-                .offset(x:offsetForCustomization)
-                .transition(.move(edge: .trailing))
-                .gesture(
-                    DragGesture(minimumDistance: 10)
-                        .onChanged({ value in
-                           
-                        })
-                        .onEnded({ value in
-                            if value.translation.width > 10{
-                                withAnimation(.bouncy){
-                                    self.show = false
-                                }
-                            }
-                        })
-                    
-                )
-                
-            }else{
-                VStack{
-                    Button{
-                        withAnimation(.bouncy){
-                            self.show = true
-                            self.offsetForCustomization = 0
-                        }
-                       
-                    }label: {
-                        ZStack{
-                            RoundedRectangle(cornerRadius:10)
-                                .fill(.regularMaterial)
-                            
-                            
-                            Image(systemName: "slider.horizontal.3")
-                                .bold()
-                        }
-                        .frame(width:50,height: 150)
-                    }
-                }
-                .transition(.push(from: .trailing))
-                .frame(height: 250)
-                
-            }
+                .padding(.horizontal,30)
         }
-        .frame(maxWidth: .infinity,maxHeight: .infinity,alignment: .topTrailing)
-        .padding(25)
+       
+      
         
     }
 }

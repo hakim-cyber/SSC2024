@@ -31,67 +31,91 @@ struct VesselSimulator: View {
         return pressure
     }
     var body: some View {
-        GeometryReader{geo in
-            ZStack{
-                if showAtmopshere{
-                    Color(red: 0.579, green: 0.898, blue: 0.972).ignoresSafeArea()
-                }
-                CommunicatingVessel(water: $vesselWater,density: density,selected: selectedVessel)
-                   
-                       
-                CustomizationView(show: $showCustomize, size: geo.size) {
-                    customizeView
-                }
-                VStack(spacing: 15){
-                    ForEach(Vessels.allCases,id:\.rawValue){vessel in
-                        let selected = vessel.rawValue == selectedVessel.rawValue
-                        RoundedRectangle(cornerRadius: 15 )
-                            .stroke(showAtmopshere ?  Color.black : Color.white,lineWidth:8)
-                            .frame(width: 70,height:70)
+      
+            GeometryReader{geo in
+                ZStack{
+                    if showAtmopshere{
+                        Color(red: 0.579, green: 0.898, blue: 0.972).ignoresSafeArea()
+                    }
+                    CommunicatingVessel(water: $vesselWater,density: density,selected: selectedVessel)
+                    
+                    
+                    
+                    VStack(spacing: 15){
+                        ForEach(Vessels.allCases,id:\.rawValue){vessel in
+                            let selected = vessel.rawValue == selectedVessel.rawValue
+                            RoundedRectangle(cornerRadius: 15 )
+                                .stroke(showAtmopshere ?  Color.black : Color.white,lineWidth:8)
+                                .frame(width: 70,height:70)
                             
-                            .overlay{
-                                Text("\(vessel.rawValue + 1)")
-                                    .bold()
-                                    .font(.system(size: 23))
-                                    .foregroundStyle(showAtmopshere ?  Color.black : Color.white)
-                            }
-                            .opacity(selected ? 1.0 : 0.5)
-                            .onTapGesture{
-                                if !selected{
-                                   
-                                        self.selectedVessel = vessel
-                                    
+                                .overlay{
+                                    Text("\(vessel.rawValue + 1)")
+                                        .bold()
+                                        .font(.system(size: 23))
+                                        .foregroundStyle(showAtmopshere ?  Color.black : Color.white)
                                 }
+                                .opacity(selected ? 1.0 : 0.5)
+                                .onTapGesture{
+                                    if !selected{
+                                        
+                                        self.selectedVessel = vessel
+                                        
+                                    }
+                                }
+                        }
+                    }
+                    .frame(maxWidth: .infinity,maxHeight:.infinity, alignment: .leading)
+                    .padding(25)
+                    .padding(.bottom,60)
+                }
+                .animation(.easeInOut, value: showAtmopshere)
+                .onAppear {
+                    startFillingTimer()
+                    
+                }
+                .onDisappear {
+                    fillTimer?.invalidate()
+                }
+                .inspector(isPresented: $showCustomize) {
+                    CustomizationView(show: $showCustomize) {
+                        customizeView
+                           
+                    }
+                    .toolbar{
+                        
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button{
+                                self.showCustomize.toggle()
+                            }label: {
+                                Label("Customize",systemImage: "slider.horizontal.3")
                             }
+                        }
+                        
+                        
+                    }
+                    .inspectorColumnWidth(min:250,ideal: geo.size.width / 3 ,max:400)
+                    
+                }
+               
+                
+                
+            }
+            .frame(width: screen.width + 5)
+            .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+                
+                // Give a moment for the screen boundaries to change after
+                // the device is rotated
+                Task { @MainActor in
+                    try await Task.sleep(for: .seconds(0.001))
+                    withAnimation{
+                        self.screen = UIScreen.main.bounds
                     }
                 }
-                .frame(maxWidth: .infinity,maxHeight:.infinity, alignment: .leading)
-                .padding(25)
-                .padding(.bottom,60)
             }
-            .animation(.easeInOut, value: showAtmopshere)
-            .onAppear {
-                       startFillingTimer()
-                
-                   }
-                   .onDisappear {
-                       fillTimer?.invalidate()
-                   }
-           
+            .navigationTitle(AboutInfo.communicatingVessels.header)
+            .navigationBarTitleDisplayMode(.inline)
+            
         
-        }
-        .frame(width: screen.width + 5)
-        .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
-                       
-                   // Give a moment for the screen boundaries to change after
-                   // the device is rotated
-                   Task { @MainActor in
-                       try await Task.sleep(for: .seconds(0.001))
-                       withAnimation{
-                           self.screen = UIScreen.main.bounds
-                       }
-                   }
-               }
        
     }
     private func startFillingTimer() {

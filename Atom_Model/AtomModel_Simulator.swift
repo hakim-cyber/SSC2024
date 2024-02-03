@@ -37,117 +37,145 @@ struct AtomModel_Simulator: View {
     var body: some View {
         GeometryReader{geo in
             let size = geo.size
-           
-            AtomModel(size: size, showOrbits: self.showOrbits, showProtonsNeutrons: showProtonsNeutrons, scale: scale, offset: offset, selectedAtomId: selectedAtomId,electronCount: $electronCount)
-            
-            
-            VStack(alignment:.leading, spacing:35){
-                let selected = atoms[selectedAtomId]
-                HStack{
-                    Image(systemName: "info.bubble.fill")
-                        .font(.system(size: 30))
-                        .padding(.trailing,10)
-                        .foregroundStyle(.secondary)
-                    Text("\(selected.id)").bold().font(.system(size: 60))
-                       .font(.system(size: 60))
-                    let ion = atom.proton - self.electronCount
-                     
-                     Text(" \(ion > 0 ? "+" : "")\(ion)\n")
+            ZStack{
+                AtomModel(size: size, showOrbits: self.showOrbits, showProtonsNeutrons: showProtonsNeutrons, scale: scale, offset: offset, selectedAtomId: selectedAtomId,electronCount: $electronCount)
+                
+                
+                VStack(alignment:.leading, spacing:35){
+                    let selected = atoms[selectedAtomId]
+                    HStack{
+                        
+                        Text("\(selected.id)").bold().font(.system(size: 60))
+                            .font(.system(size: 60))
+                        let ion = atom.proton - self.electronCount
+                        
+                        Text(" \(ion > 0 ? "+" : "")\(ion)\n")
                             .font(.system(size: 30))
                             .baselineOffset(5.0)
                             .font(.system(size: 30))
-                   
-                       
-                       
-                    
-                      
-                }
-                .contentShape(Rectangle())
-                .baselineOffset(5.0) // Adjust the value to fine-tune the position
-                .foregroundColor(.primary)
-                .bold()
-              
-                .onTapGesture {
-                    withAnimation(.bouncy){
-                        if !self.showInfo{
-                            self.showCustomization = false
-                            self.showInfo = true
-                        }else{
-                            self.showInfo = false
-                        }
-                    }
-                }
-                VStack{
-                    Button{
-                        withAnimation(.easeInOut){
-                            self.offset = .zero
-                        }
-                    }label:{
-                        Image(systemName: "camera.metering.center.weighted")
-                            .padding(20)
-                            .background(Circle().fill(.regularMaterial))
-                            .foregroundStyle(.primary)
-                    }
-                    .font(.system(size: 30))
-                    Button{
                         
-                        withAnimation(.easeInOut){
-                            self.scale += 0.1
-                        }
-                    }label:{
-                        Image(systemName: "plus.magnifyingglass")
-                            .padding(20)
-                            .background(Circle().fill(.regularMaterial))
-                            .foregroundStyle(.primary)
+                        
+                        
+                        
+                        
                     }
-                    .font(.system(size: 30))
-                    Button{
-                        withAnimation(.easeInOut){
-                            self.scale -= 0.1
-                        }
-                    }label:{
-                        Image(systemName: "minus.magnifyingglass")
-                            .padding(20)
-                            .background(Circle().fill(.regularMaterial))
-                            .foregroundStyle(.primary)
-                    }
-                    .font(.system(size: 30))
+                    .contentShape(Rectangle())
+                    .baselineOffset(5.0) // Adjust the value to fine-tune the position
+                    .foregroundColor(.primary)
+                    .bold()
                     
+                    .onTapGesture {
+                        withAnimation(.bouncy){
+                            if !self.showInfo{
+                                self.showCustomization = false
+                                self.showInfo = true
+                            }else{
+                                self.showInfo = false
+                            }
+                        }
+                    }
+                    VStack{
+                        Button{
+                            withAnimation(.easeInOut){
+                                self.offset = .zero
+                            }
+                        }label:{
+                            Image(systemName: "camera.metering.center.weighted")
+                                .padding(20)
+                                .background(Circle().fill(.regularMaterial))
+                                .foregroundStyle(.primary)
+                        }
+                        .font(.system(size: 30))
+                        Button{
+                            
+                            withAnimation(.easeInOut){
+                                self.scale += 0.1
+                            }
+                        }label:{
+                            Image(systemName: "plus.magnifyingglass")
+                                .padding(20)
+                                .background(Circle().fill(.regularMaterial))
+                                .foregroundStyle(.primary)
+                        }
+                        .font(.system(size: 30))
+                        Button{
+                            withAnimation(.easeInOut){
+                                self.scale -= 0.1
+                            }
+                        }label:{
+                            Image(systemName: "minus.magnifyingglass")
+                                .padding(20)
+                                .background(Circle().fill(.regularMaterial))
+                                .foregroundStyle(.primary)
+                        }
+                        .font(.system(size: 30))
+                        
+                    }
+                    
+                }
+                .frame(maxWidth:.infinity,maxHeight:.infinity,alignment:.topLeading)
+                
+                
+                if showInfo{
+                    let value = Swift.min (size.height, size.width)
+                    AtomInfoView(atom: atoms[selectedAtomId], geoSize: CGSize(width: value / 1.2, height: value / 2.5))
+                        .offset(x:offsetForInfo)
+                        .frame(maxWidth: .infinity,maxHeight: .infinity,alignment: .topTrailing)
+                        .padding(25)
+                        .transition(.move(edge: .trailing))
+                        .gesture(
+                            DragGesture()
+                                .onChanged({ value in
+                                    if value.translation.width > 0{
+                                        self.offsetForInfo = value.translation.width
+                                    }
+                                })
+                                .onEnded({ value in
+                                    if value.translation.width > 10{
+                                        withAnimation(.bouncy(duration: 0.5)){
+                                            
+                                            self.showInfo = false
+                                            self.offsetForInfo = 0
+                                            
+                                        }
+                                    }
+                                })
+                            
+                        )
+                }
+            }
+            .inspector(isPresented: $showCustomization){
+                customization()
+                    .inspectorColumnWidth(min:250,ideal: geo.size.width / 3 ,max:400)
+                    
+            }
+            .toolbar{
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button{
+                        withAnimation(.bouncy){
+                            if !self.showInfo{
+                                self.showCustomization = false
+                                self.showInfo = true
+                            }else{
+                                self.showInfo = false
+                            }
+                        }                }label: {
+                        Label("Customize",systemImage: "info.bubble")
+                    }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button{
+                        self.showCustomization.toggle()
+                    }label: {
+                        Label("Customize",systemImage: "slider.horizontal.3")
+                    }
                 }
                
+                
             }
-            .frame(maxWidth:.infinity,maxHeight:.infinity,alignment:.topLeading)
-            if !showInfo{
-                customization(size:size)
-            }
-                           
-            if showInfo{
-                let value = Swift.min (size.height, size.width)
-                AtomInfoView(atom: atoms[selectedAtomId], geoSize: CGSize(width: value / 1.2, height: value / 2.5))
-                    .offset(x:offsetForInfo)
-                    .frame(maxWidth: .infinity,maxHeight: .infinity,alignment: .topTrailing)
-                    .padding(25)
-                    .transition(.move(edge: .trailing))
-                    .gesture(
-                        DragGesture()
-                            .onChanged({ value in
-                                if value.translation.width > 0{
-                                    self.offsetForInfo = value.translation.width
-                                }
-                            })
-                            .onEnded({ value in
-                                if value.translation.width > 10{
-                                    withAnimation(.bouncy(duration: 0.5)){
-                                        
-                                        self.showInfo = false
-                                        self.offsetForInfo = 0
-                                        
-                                    }
-                                }
-                            })
-                        
-                    )
-            }
+            .navigationTitle(AboutInfo.atomModel.header)
+            .navigationBarTitleDisplayMode(.inline)
         }
        
         .contentShape(Rectangle())
@@ -177,6 +205,7 @@ struct AtomModel_Simulator: View {
                                })
                            )
                    )
+       
         .preferredColorScheme(.dark)
         
         .padding(25)
