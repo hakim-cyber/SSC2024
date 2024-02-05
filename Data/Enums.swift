@@ -94,9 +94,6 @@ enum AboutInfo :String, Identifiable,CaseIterable{
         switch self {
         case .communicatingVessels:
                 """
-                The Principle of Communicating Vessels in Everyday Life 🚿🌊
-
-                Introduction:
                 Ever wondered why it's so easy to spill water from a teapot or watering can? 🤔 Let's dive into the science behind the fascinating principle of communicating vessels and explore its everyday applications. 🌐💧
 
                 The Principle of Communicating Vessels:
