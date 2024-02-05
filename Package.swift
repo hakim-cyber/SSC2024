@@ -8,13 +8,13 @@ import PackageDescription
 import AppleProductTypes
 
 let package = Package(
-    name: "SSC24",
+    name: "FluxLearn",
     platforms: [
         .iOS("17.0")
     ],
     products: [
         .iOSApplication(
-            name: "SSC24",
+            name: "FluxLearn",
             targets: ["AppModule"],
             bundleIdentifier: "com.hakimAlyev.SSC24",
             teamIdentifier: "4NLRT8KSZR",
@@ -31,7 +31,8 @@ let package = Package(
                 .landscapeRight,
                 .landscapeLeft,
                 .portraitUpsideDown(.when(deviceFamilies: [.pad]))
-            ]
+            ],
+            appCategory: .education
         )
     ],
     targets: [
