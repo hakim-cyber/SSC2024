@@ -36,23 +36,23 @@ struct SubjectCard: View {
                             VStack(alignment: .leading,spacing: 10){
                                 Text(info.header)
                                     .fontWeight(.heavy)
-                                    .font(.system(size: 22))
+                                    .font(.system(size: min / 40))
                                 
                                 Text(info.inventor)
                                     .fontWeight(.regular)
-                                    .font(.system(size: 16))
+                                    .font(.system(size: min / 45))
                             }
                             .foregroundStyle(Color.primary)
                             .fontDesign(.rounded)
                             .fixedSize(horizontal: false, vertical: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
-                            .padding()
+                          
                             .multilineTextAlignment(.leading)
                             Spacer()
                             Text("View")
                                 .foregroundStyle(Color.accentColor)
                                 .fontWeight(.black)
                                 .fontDesign(.rounded)
-                                .font(.system(size: 20))
+                                .font(.system(size: min / 40))
                                 .padding(.horizontal).padding(.vertical,10)
                                 .background{
                                     RoundedRectangle(cornerRadius: 20)
