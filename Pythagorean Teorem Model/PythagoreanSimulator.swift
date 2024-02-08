@@ -24,6 +24,7 @@ struct PythagoreanSimulator: View {
     @State private var offset = CGSize.zero
     @State private var lastOffset = CGSize.zero
     
+    @State var timer: Timer?
     var body: some View {
        
         GeometryReader{geo in
@@ -41,7 +42,7 @@ struct PythagoreanSimulator: View {
                                 self.offset = CGSize(width: translation.width + lastOffset.width, height:translation.height + lastOffset.height)
                             }
                             .onEnded({ value in
-                                self.lastOffset = offset
+                              
                             })
                             .simultaneously(with:  MagnificationGesture()
                                 .onChanged { value in
@@ -55,7 +56,7 @@ struct PythagoreanSimulator: View {
                                             
                                 .onEnded({ value in
                                     
-                                    self.lastScale = scale
+                                   
                                 })
                             )
                     )
@@ -104,7 +105,27 @@ struct PythagoreanSimulator: View {
                 .frame(maxWidth: .infinity,maxHeight:.infinity,alignment:.topLeading)
                 
             }
-          
+            .onChange(of: offset) { _, newValue in
+                timer?.invalidate()
+
+                // Start a new timer
+                timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { _ in
+                    // Timer has fired, indicating that the user has stopped changing the scale value
+                    self.lastOffset = newValue
+                    print("changed")
+                }
+            }
+            .onChange(of: scale) { _, newValue in
+                timer?.invalidate()
+
+                // Start a new timer
+                timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { _ in
+                    // Timer has fired, indicating that the user has stopped changing the scale value
+                    self.lastScale = newValue
+                    print("changed")
+                }
+            }
+           
             .toolbar{
                 
                 Spacer()

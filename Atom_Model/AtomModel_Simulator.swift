@@ -35,6 +35,8 @@ struct AtomModel_Simulator: View {
     var atom:Atom{
         atoms[selectedAtomId]
     }
+    
+    @State var timer: Timer?
     var body: some View {
         GeometryReader{geo in
             let size = geo.size
@@ -206,7 +208,7 @@ struct AtomModel_Simulator: View {
                                self.offset = CGSize(width: translation.width + lastOffset.width, height:translation.height + lastOffset.height)
                            }
                            .onEnded({ value in
-                               self.lastOffset = offset
+                               
                            })
                            .simultaneously(with:  MagnificationGesture()
                                .onChanged { value in
@@ -220,13 +222,32 @@ struct AtomModel_Simulator: View {
                                            
                                .onEnded({ value in
                                    
-                                   self.lastScale = scale
+                                   
                                })
                            )
                    )
        
         .preferredColorScheme(.dark)
-        
+        .onChange(of: offset) { _, newValue in
+            timer?.invalidate()
+
+            // Start a new timer
+            timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { _ in
+                // Timer has fired, indicating that the user has stopped changing the scale value
+                self.lastOffset = newValue
+                print("changed")
+            }
+        }
+        .onChange(of: scale) { _, newValue in
+            timer?.invalidate()
+
+            // Start a new timer
+            timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { _ in
+                // Timer has fired, indicating that the user has stopped changing the scale value
+                self.lastScale = newValue
+                print("changed")
+            }
+        }
        
         
         
