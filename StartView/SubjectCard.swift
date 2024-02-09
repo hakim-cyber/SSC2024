@@ -9,11 +9,12 @@ import SwiftUI
 
 struct SubjectCard: View {
     let info:AboutInfo
+    let min:CGFloat
     
     @State private var screen = UIScreen.main.bounds
     var body: some View {
         
-        let min = min(screen.width, screen.height)
+       
             GeometryReader{geo in
                
                 ZStack{
