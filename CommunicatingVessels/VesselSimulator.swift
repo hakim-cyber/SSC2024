@@ -206,19 +206,13 @@ struct VesselSimulator: View {
                 self.filling = nil
             }
         }label: {
-            ZStack{
-                
-                Circle()
-                    .fill(Color.red)
-                
-                Text("Stop")
-                    .foregroundStyle(.white)
-                    .fontWeight(.heavy)
-                    .font(.system(size: 26))
-                    
-                
-            }
-            .frame(width: 100)
+            Text("Stop")
+                .foregroundStyle(.white)
+                .fontWeight(.heavy)
+                .font(.system(size: 26))
+                .padding(15)
+                .background(Color.red)
+                .cornerRadius(50)
         }
     }
     var actionButtons:some View{
@@ -228,38 +222,30 @@ struct VesselSimulator: View {
                     self.filling = true
                 }
             }label: {
-                ZStack{
-                    
-                    Circle()
-                        .fill(Color.accentColor)
-                    
-                    Text("Fill")
-                        .foregroundStyle(.white)
-                        .fontWeight(.heavy)
-                        .font(.system(size: 23))
-                        
-                    
-                }
-                .frame(width: 90)
+                Text("Fill")
+                    .foregroundStyle(.white)
+                    .fontWeight(.heavy)
+                    .font(.system(size: 26))
+                    .padding(15)
+                    .background(Color.accentColor)
+                    .cornerRadius(50)
             }
             Button{
                 withAnimation(.bouncy){
                     self.filling = false
                 }
             }label: {
-                ZStack{
-                    
-                    Circle()
-                        .fill(Color.accentColor)
-                    
+               
                     Text("Drain")
                         .foregroundStyle(.white)
                         .fontWeight(.heavy)
-                        .font(.system(size: 23))
-                        
+                        .font(.system(size: 26))
+                        .padding(15)
+                        .background(Color.accentColor)
+                        .cornerRadius(50)
                     
-                }
-                .frame(width: 90)
+                
+               
             }
         }
        

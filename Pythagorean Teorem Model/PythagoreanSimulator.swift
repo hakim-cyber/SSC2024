@@ -183,7 +183,7 @@ struct PythagoreanSimulator: View {
                         }
                         .padding(.top,10)
                     }
-                    .padding(.top,20)
+                    .padding(.top,40)
                     
                 }
                 .inspectorColumnWidth(min:250,ideal: geo.size.width / 3 ,max:400)

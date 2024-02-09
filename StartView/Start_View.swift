@@ -13,6 +13,7 @@ struct Start_View: View {
     @State var screen = UIScreen.main.bounds
     var body: some View {
         NavigationStack(path: $path){
+            let min = min(screen.width, screen.height)
             ScrollView(.vertical,showsIndicators: false){
                 HStack{
                     Spacer()
@@ -21,19 +22,20 @@ struct Start_View: View {
                         .font(.system(size: 26))
                         .minimumScaleFactor(0.5)
                         .fontDesign(.rounded)
-                        .fixedSize()
+                        
                         
                     Spacer()
                     
                 }
-                .padding([.horizontal,.top],60)
-                let min = min(screen.width, screen.height)
-               let grid =  [GridItem(.adaptive(minimum: min / 2.3, maximum: min / 2.3))]
-                LazyVGrid(columns:grid){
-                
-               
-                    
-                  
+                .padding([.horizontal,.top],min / 10)
+                HStack{
+                    Spacer()
+                    let grid =  [GridItem(.adaptive(minimum: min / 2.3, maximum: min / 2.3))]
+                    LazyVGrid(columns:grid){
+                        
+                        
+                        
+                        
                         
                         ForEach(AboutInfo.allCases, id:\.rawValue){info in
                             Button{
@@ -46,13 +48,14 @@ struct Start_View: View {
                             }
                             
                         }
+                        
+                        
+                    }
                     
-                    
+                    .navigationBarTitleDisplayMode(/*@START_MENU_TOKEN@*/.automatic/*@END_MENU_TOKEN@*/)
+                    .padding(.top,70)
+                    Spacer()
                 }
-              
-                .navigationBarTitleDisplayMode(/*@START_MENU_TOKEN@*/.automatic/*@END_MENU_TOKEN@*/)
-                .padding(.top,70)
-               
             }
             .navigationDestination(for: AboutInfo.self) { info in
                 switch info {
