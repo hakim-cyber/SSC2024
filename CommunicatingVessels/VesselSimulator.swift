@@ -38,16 +38,15 @@ struct VesselSimulator: View {
                         Color(red: 0.579, green: 0.898, blue: 0.972).ignoresSafeArea()
                     }
                     CommunicatingVessel(water: $vesselWater,density: density,selected: selectedVessel)
-                    
-                    
-                    
+                       
+                        .scaleEffect(1.05)
                     VStack(spacing: 15){
                         ForEach(Vessels.allCases,id:\.rawValue){vessel in
                             let selected = vessel.rawValue == selectedVessel.rawValue
                             RoundedRectangle(cornerRadius: 15 )
                                 .stroke(Color.primary,lineWidth:8)
                                 .frame(width: 70,height:70)
-                            
+                                
                                 .overlay{
                                     Text("\(vessel.rawValue + 1)")
                                         .bold()
@@ -55,6 +54,7 @@ struct VesselSimulator: View {
                                       
                                 }
                                 .opacity(selected ? 1.0 : 0.5)
+                                .contentShape(Rectangle())
                                 .onTapGesture{
                                     if !selected{
                                         
@@ -102,7 +102,7 @@ struct VesselSimulator: View {
                 
                 
             }
-            .frame(width: screen.width + 5)
+            
             .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
                 
                 // Give a moment for the screen boundaries to change after
