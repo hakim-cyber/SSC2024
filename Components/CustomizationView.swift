@@ -18,7 +18,19 @@ struct CustomizationView<Content:View>:View {
                 content
                 .frame(maxWidth: .infinity,maxHeight: .infinity,alignment: .top)
                 .padding(30)
+                .safeAreaInset(edge: .top) {
+                    HStack{
+                        Button{
+                            self.show = false
+                        }label: {
+                            Image(systemName: "xmark")
+                        }
+                        Spacer()
+                    }
+                    .padding()
+                }
         }
+        
        
       
         
